@@ -1,0 +1,15 @@
+<div
+  class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100 overflow-hidden"
+>
+  <app-header></app-header>
+  <main class="flex flex-1 overflow-hidden">
+    <app-sidebar></app-sidebar>
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="flex-1 overflow-auto">
+      <!-- Aquí va tu dashboard.component.html -->
+      <router-outlet></router-outlet>
+    </div>
+    <app-right-panel></app-right-panel>
+  </main>
+  <app-footer></app-footer>
+</div>
