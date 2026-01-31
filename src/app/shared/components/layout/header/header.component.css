@@ -1,0 +1,52 @@
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.3s ease-out;
+}
+
+/* Ocultar scrollbar pero mantener funcionalidad */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Mejoras de hover para móvil */
+@media (hover: none) {
+  .group-hover\:opacity-100,
+  .group-hover\:visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}
+/* Estilos personalizados para los hovers */
+.hover-bg-blue-900\/30:hover { background-color: rgba(30, 58, 138, 0.3); }
+.hover-bg-emerald-900\/30:hover { background-color: rgba(6, 78, 59, 0.3); }
+.hover-bg-amber-900\/30:hover { background-color: rgba(120, 53, 15, 0.3); }
+.hover-bg-green-900\/30:hover { background-color: rgba(20, 83, 45, 0.3); }
+.hover-bg-red-900\/30:hover { background-color: rgba(127, 29, 29, 0.3); }
+.hover-bg-gray-900\/30:hover { background-color: rgba(17, 24, 39, 0.3); }
+
+/* Colores de texto */
+.text-blue-400 { color: #60a5fa; }
+.text-emerald-400 { color: #34d399; }
+.text-amber-400 { color: #fbbf24; }
+.text-green-400 { color: #4ade80; }
+.text-red-400 { color: #f87171; }
+.text-gray-400 { color: #9ca3af; }

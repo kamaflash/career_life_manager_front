@@ -1,25 +1,45 @@
-<footer class="bg-gray-800/50 border-t border-gray-700/50 px-4 py-3">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-6">
-        <div class="flex items-center gap-2">
-          <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-          <span class="text-sm">Simulación activa</span>
-        </div>
-        <div class="text-sm text-gray-400">
-          Velocidad: <span class="font-medium text-white">1x</span>
-        </div>
-        <div class="text-sm text-gray-400">
-          Día: <span class="font-medium text-white">45</span>
-        </div>
-      </div>
+<footer
+  class="bg-gray-800/50 border-t border-gray-700/50 px-3 sm:px-4 py-2 sm:py-3 "
+>
+  <div
+    class="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0"
+  >
+    <!-- Información de Simulación -->
+    <!-- Información Izquierda -->
+    <div class="flex items-center gap-4">
+      <!-- Estado -->
+      <div class="flex items-center gap-1.5">
+        <div
+          class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"
+        ></div>
+        <span class="text-xs text-gray-300">{{ systemData.actualityAt  | spanishDate }} </span>
+        <p></p>
 
-      <div class="flex items-center gap-4">
-        <button class="px-4 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm transition">
-          Guardar Partida
-        </button>
-        <button class="px-4 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg text-sm transition">
-          Avanzar Mes
-        </button>
       </div>
     </div>
-  </footer>
+
+    <!-- Controles -->
+    <div class="flex items-center gap-2 sm:gap-4">
+      <!-- Botón Guardar - Oculto en móvil muy pequeño -->
+      <button
+        class="hidden xs:flex px-3 py-1.5 sm:px-4 sm:py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-xs sm:text-sm transition-colors whitespace-nowrap"
+      >
+        <span class="hidden sm:inline">Guardar Partida</span>
+        <span class="sm:hidden">Guardar</span>
+      </button>
+
+
+      <!-- Botón Avanzar Mes -->
+      <button
+        class="px-3 py-1.5 sm:px-4 sm:py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg text-xs sm:text-sm transition-colors whitespace-nowrap cursor-pointer"
+        (click)="avance()"
+      >
+        <span class="hidden sm:inline">Avanzar</span>
+        <span class="sm:hidden">Avanzar</span>
+      </button>
+
+      <!-- Menú de Velocidad (solo desktop) -->
+    </div>
+  </div>
+
+</footer>

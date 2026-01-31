@@ -1,0 +1,32 @@
+/* Scrollbar personalizado */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: rgba(31, 41, 55, 0.3);
+  border-radius: 3px;
+}
+
+.scrollbar-thumb-blue-500\/30::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.3);
+  border-radius: 3px;
+}
+
+.scrollbar-thumb-blue-500\/50::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.5);
+}
+
+.scrollbar-thumb-purple-500\/30::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 3px;
+}
+
+.scrollbar-thumb-purple-500\/50::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.5);
+}
+
+.scrollbar-track-gray-800\/30::-webkit-scrollbar-track {
+  background: rgba(31, 41, 55, 0.3);
+}

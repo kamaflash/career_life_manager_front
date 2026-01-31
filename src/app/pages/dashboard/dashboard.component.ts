@@ -3,7 +3,11 @@ import { CommonModule } from '@angular/common';
 import { interval, Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
+import { UserService } from '../../core/services/users/users.service';
+import { BaseService } from '../../core/services/base/base-service.service';
+import { environment } from '../../../enviroments/environment';
+const endpoint = environment.baseUrlSpring + 'users';
 
 // Interfaces
 interface PlayerState {
@@ -61,7 +65,13 @@ interface Job {
 
 interface GameEvent {
   id: string;
-  type: 'education' | 'career' | 'business' | 'financial' | 'personal' | 'random';
+  type:
+    | 'education'
+    | 'career'
+    | 'business'
+    | 'financial'
+    | 'personal'
+    | 'random';
   title: string;
   description: string;
   date: Date;
@@ -99,22 +109,52 @@ interface QuickStat {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent  {
- title = 'Career Life Manager 2025';
+export class DashboardComponent implements OnInit {
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private baseService: BaseService,
+  ) {}
+  ngOnInit(): void {
+    this.getUser();
+  }
+  title = 'Career Life Manager 2025';
 
   // Métodos para la barra superior
   getCurrentDate(): string {
     return new Date().toLocaleDateString('es-ES', {
       day: '2-digit',
       month: 'short',
-      year: 'numeric'
+      year: 'numeric',
     });
   }
 
   getPlayerAge(): number {
     // Aquí deberías obtener la edad real del jugador
     return 22;
+  }
+
+  getUser() {
+    const url = endpoint + '/full/' + this.userService.user?.id;
+    this.baseService.getItems(url).subscribe({
+      next: (resp) => {
+        if (resp) {
+          this.userService.user = resp;
+          sessionStorage.setItem('us', JSON.stringify(resp));
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+        if (this.userService.user && !this.userService.user.persons) {
+          this.router.navigate(['/create-person']);
+        } else {
+          this.router.navigate(['/index']);
+        }
+      },
+    });
   }
 }

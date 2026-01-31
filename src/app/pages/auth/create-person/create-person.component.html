@@ -1,0 +1,370 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-950 p-4">
+  <div class="max-w-7xl mx-auto h-[calc(100vh-2rem)]">
+    <div class="flex flex-col md:flex-row gap-6 h-full">
+
+      <!-- Panel Izquierdo: Vista Previa del Personaje -->
+      <div class="md:w-2/5 lg:w-1/3 flex flex-col">
+        <div class="bg-gradient-to-br from-blue-900/20 to-purple-900/20 rounded-2xl border border-gray-700/50 p-6 flex-1 overflow-hidden flex flex-col">
+          <!-- Encabezado -->
+          <div class="text-center mb-8 flex-shrink-0">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-3xl mb-4">
+              <span class="text-4xl">{{
+                getAvatarByAgeAndSituation(
+                  characterPreview.age,
+                  characterPreview.currentSituation
+                )
+              }}</span>
+            </div>
+            <h2 class="text-2xl font-bold mb-2 text-gray-100">
+              {{ characterPreview.fullName || "Nuevo Personaje" }}
+            </h2>
+            <p class="text-gray-400">
+              {{ getSituationLabel(characterPreview.currentSituation) }}
+            </p>
+            <div class="inline-block mt-2 px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">
+              {{ characterPreview.age }} años
+            </div>
+          </div>
+
+          <!-- Contenido desplazable -->
+          <div class="flex-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-blue-500/30 scrollbar-track-gray-800/30 hover:scrollbar-thumb-blue-500/50">
+            <div class="space-y-6 pb-4">
+              <!-- NIVEL EDUCATIVO INICIAL -->
+              <div class="bg-gray-800/30 rounded-xl p-4 border border-gray-700/30">
+                <h3 class="font-bold text-lg mb-3 text-gray-100 flex items-center gap-2">
+                  <span>📚</span> Nivel Educativo Inicial
+                </h3>
+                <div class="space-y-4">
+                  <div>
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="text-gray-300 text-sm">Nivel alcanzado:</span>
+                      <span
+                        class="font-medium px-2 py-1 rounded text-xs"
+                        [ngClass]="{
+                          'bg-red-500/20 text-red-300': characterPreview.educationLevel === 'none',
+                          'bg-yellow-500/20 text-yellow-300': characterPreview.educationLevel === 'basic',
+                          'bg-green-500/20 text-green-300': characterPreview.educationLevel === 'highschool',
+                          'bg-blue-500/20 text-blue-300': characterPreview.educationLevel === 'technical',
+                          'bg-purple-500/20 text-purple-300': characterPreview.educationLevel === 'university'
+                        }"
+                      >
+                        {{ getEducationLevelLabel(characterPreview.educationLevel) }}
+                      </span>
+                    </div>
+
+                    <div *ngIf="characterPreview.educationField" class="mb-3">
+                      <div class="text-gray-400 text-sm mb-1">Área de estudio:</div>
+                      <div class="flex flex-wrap gap-1">
+                        <span class="px-2 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs">
+                          {{ getEducationFieldLabel(characterPreview.educationField) }}
+                        </span>
+                        <span *ngIf="characterPreview.educationSpecialization"
+                          class="px-2 py-1 bg-blue-500/10 text-blue-200 rounded-full text-xs">
+                          {{ characterPreview.educationSpecialization }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="mb-3">
+                      <div class="flex items-center justify-between mb-1">
+                        <span class="text-gray-300 text-sm">Rendimiento académico:</span>
+                        <span class="text-sm font-medium"
+                          [ngClass]="{
+                            'text-red-400': characterPreview.academicPerformance === 'low',
+                            'text-yellow-400': characterPreview.academicPerformance === 'average',
+                            'text-green-400': characterPreview.academicPerformance === 'high',
+                            'text-blue-400': characterPreview.academicPerformance === 'excellent'
+                          }">
+                          {{ getAcademicPerformanceLabel(characterPreview.academicPerformance) }}
+                        </span>
+                      </div>
+                      <div class="w-full bg-gray-700/50 rounded-full h-1.5">
+                        <div
+                          class="h-1.5 rounded-full"
+                          [ngClass]="{
+                            'bg-red-500 w-1/4': characterPreview.academicPerformance === 'low',
+                            'bg-yellow-500 w-1/2': characterPreview.academicPerformance === 'average',
+                            'bg-green-500 w-3/4': characterPreview.academicPerformance === 'high',
+                            'bg-blue-500 w-full': characterPreview.academicPerformance === 'excellent'
+                          }">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div *ngIf="characterPreview.educationGaps && characterPreview.educationGaps.length > 0">
+                      <div class="text-gray-400 text-sm mb-1">Brechas a superar:</div>
+                      <div class="flex flex-wrap gap-1">
+                        <span
+                          *ngFor="let gap of characterPreview.educationGaps.slice(0, 3)"
+                          class="px-2 py-1 bg-amber-500/20 text-amber-300 rounded text-xs">
+                          {{ getEducationGapLabel(gap) }}
+                        </span>
+                        <span
+                          *ngIf="characterPreview.educationGaps.length > 3"
+                          class="px-2 py-1 bg-gray-700/50 text-gray-400 rounded text-xs">
+                          +{{ characterPreview.educationGaps.length - 3 }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="mt-3 pt-3 border-t border-gray-700/30">
+                      <div class="flex items-center justify-between">
+                        <span class="text-gray-300 text-sm">Potencial educativo:</span>
+                        <div class="flex items-center gap-1">
+                          <span *ngFor="let i of [1, 2, 3]"
+                            class="w-2 h-4 rounded-sm"
+                            [ngClass]="{
+                              'bg-blue-500': i <= calculateEducationalPotential(),
+                              'bg-gray-700': i > calculateEducationalPotential()
+                            }">
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SITUACIÓN ECONÓMICA DETALLADA -->
+              <div class="bg-gray-800/30 rounded-xl p-4 border border-gray-700/30">
+                <h3 class="font-bold text-lg mb-3 text-gray-100 flex items-center gap-2">
+                  <span>💰</span> Situación Económica Inicial
+                </h3>
+                <div class="space-y-4">
+                  <div class="space-y-3">
+                    <div>
+                      <div class="flex items-center justify-between mb-1">
+                        <span class="text-gray-300 text-sm">Aportación mensual:</span>
+                        <span class="font-medium text-sm"
+                          [ngClass]="{
+                            'text-red-400': calculateIncomeLevel() === 'low',
+                            'text-yellow-400': calculateIncomeLevel() === 'medium',
+                            'text-green-400': calculateIncomeLevel() === 'high'
+                          }">
+                          {{ formatCurrencyEconomy(characterPreview.familySituation) }}
+                        </span>
+                      </div>
+                      <div class="text-xs text-gray-400">
+                        {{ getIncomeLevelLabel(calculateIncomeLevel()) }}
+                      </div>
+                    </div>
+
+                    <div *ngIf="characterPreview.incomeSources && characterPreview.incomeSources.length > 0">
+                      <div class="text-gray-400 text-sm mb-1">Fuentes de ingreso:</div>
+                      <div class="flex flex-wrap gap-1">
+                        <span
+                          *ngFor="let source of characterPreview.incomeSources"
+                          class="px-2 py-1 bg-green-500/20 text-green-300 rounded text-xs">
+                          {{ getIncomeSourceLabel(source) }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="space-y-2">
+                    <div class="text-gray-400 text-sm mb-1">Gastos mensuales:</div>
+                    <div class="space-y-1">
+                      <div *ngFor="let expense of getMonthlyExpensesSummary()"
+                        class="flex items-center justify-between text-xs">
+                        <span class="text-gray-300">{{ expense.category }}:</span>
+                        <span class="text-gray-100">{{ formatCurrency(expense.amount) }}</span>
+                      </div>
+                    </div>
+
+                    <div class="mt-3 pt-3 border-t border-gray-700/30">
+                      <div class="flex items-center justify-between">
+                        <span class="text-gray-300 text-sm">Balance mensual:</span>
+                        <span class="font-medium"
+                          [ngClass]="{
+                            'text-red-400': calculateMonthlyBalance() < 0,
+                            'text-yellow-400': calculateMonthlyBalance() >= 0 && calculateMonthlyBalance() < 100,
+                            'text-green-400': calculateMonthlyBalance() >= 100
+                          }">
+                          {{ formatCurrency(calculateMonthlyBalance()) }}
+                        </span>
+                      </div>
+                      <div class="text-xs mt-1"
+                        [ngClass]="{
+                          'text-red-400': calculateMonthlyBalance() < 0,
+                          'text-green-400': calculateMonthlyBalance() >= 0
+                        }">
+                        {{ getBalanceStatusLabel(calculateMonthlyBalance()) }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-3 pt-3 border-t border-gray-700/30">
+                    <div class="flex items-center justify-between mb-1">
+                      <span class="text-gray-300 text-sm">Capacidad inversión educativa:</span>
+                      <span class="font-medium text-sm"
+                        [ngClass]="{
+                          'text-red-400': calculateEducationInvestmentCapacity() === 'none',
+                          'text-yellow-400': calculateEducationInvestmentCapacity() === 'low',
+                          'text-green-400': calculateEducationInvestmentCapacity() === 'medium',
+                          'text-blue-400': calculateEducationInvestmentCapacity() === 'high'
+                        }">
+                        {{ getInvestmentCapacityLabel(calculateEducationInvestmentCapacity()) }}
+                      </span>
+                    </div>
+                    <div class="w-full bg-gray-700/50 rounded-full h-1.5">
+                      <div
+                        class="h-1.5 rounded-full"
+                        [ngClass]="{
+                          'bg-red-500 w-1/4': calculateEducationInvestmentCapacity() === 'none',
+                          'bg-yellow-500 w-2/4': calculateEducationInvestmentCapacity() === 'low',
+                          'bg-green-500 w-3/4': calculateEducationInvestmentCapacity() === 'medium',
+                          'bg-blue-500 w-full': calculateEducationInvestmentCapacity() === 'high'
+                        }">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Situación Actual -->
+              <div class="bg-gray-800/30 rounded-xl p-4 border border-gray-700/30">
+                <h3 class="font-bold text-lg mb-3 text-gray-100 flex items-center gap-2">
+                  <span>📅</span> Situación Actual
+                </h3>
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-400 text-sm">Estado:</span>
+                    <span class="text-gray-100 font-medium">
+                      {{ getCurrentSituationLabel(characterPreview.currentSituation) }}
+                    </span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-400 text-sm">Ciudad:</span>
+                    <span class="text-gray-100 font-medium">
+                      {{ getCityName(characterPreview.city) }}
+                    </span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-400 text-sm">Interés:</span>
+                    <span class="text-gray-100 font-medium">
+                      {{ getCareerInterestLabel(characterPreview.careerInterest) }}
+                    </span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-400 text-sm">Aspiración:</span>
+                    <span class="text-gray-100 font-medium">
+                      {{ getAspirationLabel(characterPreview.aspiration) }}
+                    </span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-400 text-sm">Compatibilidad:</span>
+                    <span class="font-medium text-sm"
+                      [ngClass]="{
+                        'text-red-400': calculateEducationCareerCompatibility() < 3,
+                        'text-yellow-400': calculateEducationCareerCompatibility() >= 3 && calculateEducationCareerCompatibility() < 7,
+                        'text-green-400': calculateEducationCareerCompatibility() >= 7
+                      }">
+                      {{ calculateEducationCareerCompatibility() }}/10
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Resumen de Potencial Mejorado -->
+              <div class="pt-4 border-t border-gray-700/50">
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-300 text-sm">Potencial educativo:</span>
+                    <div class="flex items-center gap-1">
+                      <span *ngFor="let i of [1, 2, 3]"
+                        class="w-2 h-4 rounded-sm"
+                        [ngClass]="{
+                          'bg-blue-500': i <= calculateEducationalPotential(),
+                          'bg-gray-700': i > calculateEducationalPotential()
+                        }">
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-300 text-sm">Capacidad financiera:</span>
+                    <div class="flex items-center gap-1">
+                      <span *ngFor="let i of [1, 2, 3]"
+                        class="w-2 h-4 rounded-sm"
+                        [ngClass]="{
+                          'bg-green-500': i <= calculateFinancialCapacity(),
+                          'bg-gray-700': i > calculateFinancialCapacity()
+                        }">
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-300 text-sm">Potencial general:</span>
+                    <div class="flex items-center gap-1">
+                      <span *ngFor="let i of [1, 2, 3, 4, 5]"
+                        class="w-2 h-4 rounded-sm"
+                        [ngClass]="{
+                          'bg-purple-500': i <= getPotentialScore(),
+                          'bg-gray-700': i > getPotentialScore()
+                        }">
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-3 text-xs text-gray-400">
+                  Basado en educación, recursos económicos, habilidades y apoyo disponible
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel Derecho: Formulario de Creación -->
+      <div class="md:w-3/5 lg:w-2/3 flex flex-col">
+        <div class="bg-gray-800/30 border border-gray-700/50 rounded-2xl p-6 flex-1 overflow-hidden flex flex-col">
+          <div class="flex-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-purple-500/30 scrollbar-track-gray-800/30 hover:scrollbar-thumb-purple-500/50">
+            <!-- Encabezado -->
+            <div class="text-center mb-8">
+              <h1 class="text-3xl font-bold mb-2 text-gray-100">
+                Creación de Personaje
+              </h1>
+              <p class="text-gray-400">
+                Diseña tu alter ego profesional. Cada elección afectará tu
+                experiencia de juego.
+              </p>
+            </div>
+
+            <!-- Formulario dinámico -->
+            <app-form-dynamic
+              [config]="characterConfig"
+              [isLoading]="isLoading"
+              (formSubmit)="onFormSubmit($event)"
+              (formChange)="onFormChange($event)"
+            >
+            </app-form-dynamic>
+
+            <!-- Notas importantes -->
+            <div class="mt-8 p-4 bg-gradient-to-r from-blue-900/20 to-purple-900/20 rounded-xl border border-blue-500/30">
+              <div class="flex items-start gap-3">
+                <span class="text-xl mt-1">💡</span>
+                <div>
+                  <h4 class="font-bold text-gray-100 mb-2">
+                    Consejos para crear tu personaje
+                  </h4>
+                  <ul class="text-sm text-gray-300 space-y-1">
+                    <li>
+                      • Tu formación académica determina tus habilidades iniciales
+                    </li>
+                    <li>
+                      • La ciudad elegida afecta las oportunidades disponibles
+                    </li>
+                    <li>• Puedes seleccionar hasta 3 rasgos de personalidad</li>
+                    <li>
+                      • ¡No te preocupes! Siempre podrás mejorar tus habilidades más
+                      tarde
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

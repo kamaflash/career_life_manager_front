@@ -5,250 +5,242 @@
     <div class="flex items-center gap-3">
       <!-- Logo -->
       <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-700 rounded-xl flex items-center justify-center shadow-lg">
-        <span class="text-lg font-bold text-white">CL</span>
+        <span class="material-icons text-white">person</span>
       </div>
 
       <!-- Título -->
-      <div>
+      <div class="hidden sm:block">
         <h1 class="text-lg sm:text-xl font-bold text-white">Career Life Manager</h1>
         <p class="text-xs text-gray-400">Gestión Profesional Integral</p>
       </div>
     </div>
 
-    <!-- Navegación Principal Expandida -->
+    <!-- Búsqueda Móvil (se muestra cuando está abierta) -->
+    @if (isSearchOpen) {
+      <div class="absolute inset-x-0 top-full mt-2 px-4 z-40 lg:hidden">
+        <div class="relative">
+          <input
+            type="search"
+            [(ngModel)]="searchQuery"
+            placeholder="Buscar en Career Life Manager..."
+            class="w-full px-4 py-3 pl-12 bg-gray-900/95 backdrop-blur-xl border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            (keyup.enter)="closeSearch()"
+          >
+          <span class="absolute left-4 top-3.5 material-icons text-gray-400">search</span>
+          <button
+            (click)="closeSearch()"
+            class="absolute right-3 top-3 text-gray-400 hover:text-white"
+          >
+            <span class="material-icons text-sm">close</span>
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Navegación Principal Desktop -->
     <nav class="hidden lg:flex items-center gap-1">
-      <!-- Dashboard -->
-      <div class="relative group">
-        <button class="px-4 py-2.5 rounded-xl hover:bg-blue-900/30 transition-colors flex items-center gap-2">
-          <span class="text-lg">📊</span>
-          <span class="text-sm font-medium text-gray-300">Dashboard</span>
-          <span class="text-gray-500">▼</span>
-        </button>
-        <div class="absolute top-full left-0 mt-2 w-56 bg-gray-900/95 backdrop-blur-xl rounded-xl border border-gray-800 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-          <div class="p-2">
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-900/30 transition-colors">
-              <span class="text-blue-400">📈</span>
-              <span class="text-sm">Análisis General</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-900/30 transition-colors">
-              <span class="text-blue-400">🎯</span>
-              <span class="text-sm">Objetivos</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-900/30 transition-colors">
-              <span class="text-blue-400">📋</span>
-              <span class="text-sm">Reportes</span>
-            </a>
+      @for (menuItem of MENU_NAVIGATION.mainNav; track menuItem.id) {
+        @if (menuItem.dropdown) {
+          <div class="relative group">
+            <button class="px-4 py-2.5 rounded-xl hover:bg-{{menuItem.color}}-900/30 flex items-center gap-2">
+              <span class="material-icons text-lg">{{menuItem.icon}}</span>
+              <span class="text-sm font-medium text-gray-300">{{menuItem.name}}</span>
+              <span class="material-icons text-gray-500 text-xs">expand_more</span>
+            </button>
+            <div class="absolute top-full left-0 mt-2 w-56 bg-gray-900/95 backdrop-blur-xl rounded-xl border border-gray-800 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+              <div class="p-2">
+                @for (subItem of menuItem.dropdown; track subItem.name) {
+                  <a
+                    [href]="subItem.link"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-{{menuItem.color}}-900/30 transition-colors"
+                  >
+                    <span class="material-icons text-{{subItem.color}}-400">{{subItem.icon}}</span>
+                    <span class="text-sm">{{subItem.name}}</span>
+                  </a>
+                }
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Desarrollo -->
-      <div class="relative group">
-        <button class="px-4 py-2.5 rounded-xl hover:bg-emerald-900/30 transition-colors flex items-center gap-2">
-          <span class="text-lg">🚀</span>
-          <span class="text-sm font-medium text-gray-300">Desarrollo</span>
-          <span class="text-gray-500">▼</span>
-        </button>
-        <div class="absolute top-full left-0 mt-2 w-56 bg-gray-900/95 backdrop-blur-xl rounded-xl border border-gray-800 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-          <div class="p-2">
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-emerald-900/30 transition-colors">
-              <span class="text-emerald-400">🎓</span>
-              <span class="text-sm">Cursos & Certificaciones</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-emerald-900/30 transition-colors">
-              <span class="text-emerald-400">📚</span>
-              <span class="text-sm">Habilidades</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-emerald-900/30 transition-colors">
-              <span class="text-emerald-400">🎯</span>
-              <span class="text-sm">Metas de Aprendizaje</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Carrera -->
-      <div class="relative group">
-        <button class="px-4 py-2.5 rounded-xl hover:bg-amber-900/30 transition-colors flex items-center gap-2">
-          <span class="text-lg">💼</span>
-          <span class="text-sm font-medium text-gray-300">Carrera</span>
-          <span class="text-gray-500">▼</span>
-        </button>
-        <div class="absolute top-full left-0 mt-2 w-56 bg-gray-900/95 backdrop-blur-xl rounded-xl border border-gray-800 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-          <div class="p-2">
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-amber-900/30 transition-colors">
-              <span class="text-amber-400">🏢</span>
-              <span class="text-sm">Experiencia Laboral</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-amber-900/30 transition-colors">
-              <span class="text-amber-400">📄</span>
-              <span class="text-sm">CV & Portafolio</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-amber-900/30 transition-colors">
-              <span class="text-amber-400">🤝</span>
-              <span class="text-sm">Networking</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-amber-900/30 transition-colors">
-              <span class="text-amber-400">🎯</span>
-              <span class="text-sm">Plan de Carrera</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Finanzas -->
-      <div class="relative group">
-        <button class="px-4 py-2.5 rounded-xl hover:bg-green-900/30 transition-colors flex items-center gap-2">
-          <span class="text-lg">💰</span>
-          <span class="text-sm font-medium text-gray-300">Finanzas</span>
-          <span class="text-gray-500">▼</span>
-        </button>
-        <div class="absolute top-full left-0 mt-2 w-56 bg-gray-900/95 backdrop-blur-xl rounded-xl border border-gray-800 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-          <div class="p-2">
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-green-900/30 transition-colors">
-              <span class="text-green-400">📊</span>
-              <span class="text-sm">Presupuesto</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-green-900/30 transition-colors">
-              <span class="text-green-400">💵</span>
-              <span class="text-sm">Ingresos</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-green-900/30 transition-colors">
-              <span class="text-green-400">🏦</span>
-              <span class="text-sm">Inversiones</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-green-900/30 transition-colors">
-              <span class="text-green-400">🎯</span>
-              <span class="text-sm">Metas Financieras</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Salud & Bienestar -->
-      <div class="relative group">
-        <button class="px-4 py-2.5 rounded-xl hover:bg-red-900/30 transition-colors flex items-center gap-2">
-          <span class="text-lg">❤️</span>
-          <span class="text-sm font-medium text-gray-300">Salud</span>
-          <span class="text-gray-500">▼</span>
-        </button>
-        <div class="absolute top-full left-0 mt-2 w-56 bg-gray-900/95 backdrop-blur-xl rounded-xl border border-gray-800 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-          <div class="p-2">
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-900/30 transition-colors">
-              <span class="text-red-400">💪</span>
-              <span class="text-sm">Ejercicio</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-900/30 transition-colors">
-              <span class="text-red-400">🥗</span>
-              <span class="text-sm">Nutrición</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-900/30 transition-colors">
-              <span class="text-red-400">😴</span>
-              <span class="text-sm">Descanso</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-900/30 transition-colors">
-              <span class="text-red-400">🧠</span>
-              <span class="text-sm">Salud Mental</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Configuración -->
-      <button class="px-4 py-2.5 rounded-xl hover:bg-gray-800 transition-colors flex items-center gap-2">
-        <span class="text-lg">⚙️</span>
-        <span class="text-sm font-medium text-gray-300">Configuración</span>
-      </button>
+        } @else {
+          <button class="px-4 py-2.5 rounded-xl hover:bg-gray-800 transition-colors flex items-center gap-2">
+            <span class="material-icons text-lg">{{menuItem.icon}}</span>
+            <span class="text-sm font-medium text-gray-300">{{menuItem.name}}</span>
+          </button>
+        }
+      }
     </nav>
 
     <!-- Controles Derecha -->
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2 sm:gap-3">
 
-      <!-- Notificaciones -->
+      <!-- Botón Búsqueda Móvil -->
+      <button
+        (click)="toggleSearch()"
+        class="lg:hidden p-2.5 rounded-xl hover:bg-gray-800 transition-colors"
+        [class.bg-gray-800]="isSearchOpen"
+      >
+        <span class="material-icons">search</span>
+      </button>
+
+      <!-- Botón Notificaciones -->
       <div class="relative">
         <button class="p-2.5 rounded-xl hover:bg-gray-800 transition-colors">
-          <span class="text-lg">🔔</span>
-          <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-600 rounded-full flex items-center justify-center">
-            <span class="text-xs text-white">3</span>
-          </span>
+          <span class="material-icons">notifications</span>
+          @if (unreadNotifications > 0) {
+            <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-600 rounded-full flex items-center justify-center">
+              <span class="text-xs text-white">{{unreadNotifications}}</span>
+            </span>
+          }
         </button>
       </div>
 
-      <!-- Búsqueda -->
-      <button class="p-2.5 rounded-xl hover:bg-gray-800 transition-colors">
-        <span class="text-lg">🔍</span>
+      <!-- Calendario Desktop/Tablet -->
+      <button class="hidden sm:flex items-center gap-2 p-2.5 rounded-xl hover:bg-gray-800 transition-colors">
+        <span class="material-icons">calendar_today</span>
+        <span class="hidden lg:block text-sm text-gray-300">Hoy</span>
       </button>
 
-      <!-- Calendario -->
-      <button class="p-2.5 rounded-xl hover:bg-gray-800 transition-colors hidden sm:flex items-center gap-2">
-        <span class="text-lg">📅</span>
-        <span class="text-sm text-gray-300">Hoy</span>
-      </button>
-
-      <!-- Usuario -->
-      <div class="relative group">
+      <!-- Usuario Desktop -->
+      <div class="hidden lg:block relative group">
         <button class="flex items-center gap-2 p-1.5 rounded-xl hover:bg-gray-800 transition-colors">
           <div class="w-9 h-9 bg-gradient-to-br from-blue-600 to-purple-700 rounded-full flex items-center justify-center">
-            <span class="text-white font-bold">M</span>
+            <span class="material-icons text-white">person</span>
           </div>
-          <div class="hidden lg:block text-left">
-            <div class="text-sm font-medium text-white">Manager</div>
+          <div class="text-left">
+            <div class="text-sm font-medium text-white">{{player?.fullName || 'Usuario'}}</div>
             <div class="text-xs text-gray-400">Nivel Profesional</div>
           </div>
-          <span class="text-gray-500 hidden lg:inline">▼</span>
+          <span class="material-icons text-gray-500">expand_more</span>
         </button>
 
-        <!-- Menú Usuario -->
+        <!-- Menú Usuario Desktop -->
         <div class="absolute right-0 top-full mt-2 w-48 bg-gray-900/95 backdrop-blur-xl rounded-xl border border-gray-800 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
           <div class="p-2">
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 transition-colors">
-              <span class="text-gray-400">👤</span>
-              <span class="text-sm">Mi Perfil</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 transition-colors">
-              <span class="text-gray-400">⚙️</span>
-              <span class="text-sm">Configuración</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 transition-colors">
-              <span class="text-gray-400">🛡️</span>
-              <span class="text-sm">Privacidad</span>
-            </a>
-            <div class="border-t border-gray-800 my-2"></div>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-900/30 transition-colors">
-              <span class="text-red-400">🚪</span>
-              <span class="text-sm">Cerrar Sesión</span>
-            </a>
+            @for (userItem of MENU_NAVIGATION.userMenu; track userItem.name; let i = $index) {
+              @if (i === MENU_NAVIGATION.userMenu.length - 1) {
+                <div class="border-t border-gray-800 my-2"></div>
+              }
+              <a
+                [href]="userItem.link"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{userItem.color === 'red' ? 'hover:bg-red-900/30 text-red-400' : 'hover:bg-gray-800 text-gray-400'}} transition-colors"
+              >
+                <span class="material-icons">{{userItem.icon}}</span>
+                <span class="text-sm">{{userItem.name}}</span>
+              </a>
+            }
           </div>
         </div>
       </div>
+
+      <!-- Botón Menú Hamburguesa Móvil/Tablet -->
+      <button
+        (click)="toggleMobileMenu()"
+        class="lg:hidden p-2.5 rounded-xl hover:bg-gray-800 transition-colors"
+        [class.bg-gray-800]="isMobileMenuOpen"
+      >
+        <span class="material-icons">{{isMobileMenuOpen ? 'close' : 'menu'}}</span>
+      </button>
     </div>
   </div>
 
-  <!-- Navegación Móvil -->
-  <div class="lg:hidden border-t border-gray-800/50">
-    <div class="flex items-center justify-between px-4 py-2 overflow-x-auto">
-      <button class="px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors whitespace-nowrap flex items-center gap-1">
-        <span>📊</span>
-        <span class="text-sm">Dashboard</span>
-      </button>
-      <button class="px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors whitespace-nowrap flex items-center gap-1">
-        <span>🚀</span>
-        <span class="text-sm">Desarrollo</span>
-      </button>
-      <button class="px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors whitespace-nowrap flex items-center gap-1">
-        <span>💼</span>
-        <span class="text-sm">Carrera</span>
-      </button>
-      <button class="px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors whitespace-nowrap flex items-center gap-1">
-        <span>💰</span>
-        <span class="text-sm">Finanzas</span>
-      </button>
-      <button class="px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors whitespace-nowrap flex items-center gap-1">
-        <span>⚙️</span>
-        <span class="text-sm">Ajustes</span>
-      </button>
+  <!-- Menú Móvil/Tablet Expandible -->
+  @if (isMobileMenuOpen) {
+    <div class="lg:hidden bg-gray-900/95 backdrop-blur-xl border-t border-gray-800/50 max-h-[70vh] overflow-y-auto">
+      <div class="px-4 py-3">
+
+        <!-- Información del Usuario Móvil -->
+        <div class="flex items-center gap-3 mb-4 p-3 rounded-xl bg-gray-800/50">
+          <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-700 rounded-full flex items-center justify-center">
+            <span class="material-icons text-white">person</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="text-lg font-medium text-white truncate">{{player?.fullName || 'Usuario'}}</div>
+            <div class="text-sm text-gray-400">Nivel Profesional</div>
+          </div>
+        </div>
+
+        <!-- Navegación Principal Móvil -->
+        <div class="space-y-1 mb-4">
+          @for (menuItem of MENU_NAVIGATION.mainNav; track menuItem.id) {
+            <div class="mb-1">
+              @if (menuItem.dropdown) {
+                <div>
+                  <button
+                    (click)="toggleDropdown(menuItem.id)"
+                    class="w-full flex items-center justify-between px-3 py-3 rounded-xl hover:bg-gray-800 transition-colors"
+                  >
+                    <div class="flex items-center gap-3">
+                      <span class="material-icons">{{menuItem.icon}}</span>
+                      <span class="text-gray-300">{{menuItem.name}}</span>
+                    </div>
+                    <span class="material-icons text-gray-500 transform transition-transform duration-300"
+                      [class.rotate-180]="activeDropdown === menuItem.id">
+                      expand_more
+                    </span>
+                  </button>
+
+                  @if (activeDropdown === menuItem.id) {
+                    <div class="pl-4 pr-2 py-2 space-y-1">
+                      @for (subItem of menuItem.dropdown; track subItem.name) {
+                        <a
+                          [href]="subItem.link"
+                          class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-{{menuItem.color}}-900/30 transition-colors"
+                        >
+                          <span class="material-icons text-{{subItem.color}}-400">{{subItem.icon}}</span>
+                          <span class="text-sm">{{subItem.name}}</span>
+                        </a>
+                      }
+                    </div>
+                  }
+                </div>
+              } @else {
+                <button class="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-gray-800 transition-colors">
+                  <span class="material-icons">{{menuItem.icon}}</span>
+                  <span class="text-gray-300">{{menuItem.name}}</span>
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Acciones Rápidas Móvil -->
+        <div class="grid grid-cols-3 gap-2 mb-4">
+          <button class="flex flex-col items-center justify-center p-3 rounded-xl hover:bg-gray-800 transition-colors">
+            <span class="material-icons mb-1">calendar_today</span>
+            <span class="text-xs text-gray-400">Calendario</span>
+          </button>
+          <button
+            (click)="toggleSearch(); closeMobileMenu();"
+            class="flex flex-col items-center justify-center p-3 rounded-xl hover:bg-gray-800 transition-colors"
+          >
+            <span class="material-icons mb-1">search</span>
+            <span class="text-xs text-gray-400">Buscar</span>
+          </button>
+          <a
+            href="/settings"
+            class="flex flex-col items-center justify-center p-3 rounded-xl hover:bg-gray-800 transition-colors"
+          >
+            <span class="material-icons mb-1">settings</span>
+            <span class="text-xs text-gray-400">Ajustes</span>
+          </a>
+        </div>
+
+        <!-- Menú Usuario Móvil -->
+        <div class="border-t border-gray-800 pt-4">
+          @for (userItem of MENU_NAVIGATION.userMenu; track userItem.name) {
+            <a
+              [href]="userItem.link"
+              (click)="closeMobileMenu()"
+              class="flex items-center gap-3 px-3 py-3 rounded-lg {{userItem.color === 'red' ? 'hover:bg-red-900/30 text-red-400' : 'hover:bg-gray-800 text-gray-300'}} transition-colors mb-1"
+            >
+              <span class="material-icons">{{userItem.icon}}</span>
+              <span>{{userItem.name}}</span>
+            </a>
+          }
+        </div>
+      </div>
     </div>
-  </div>
+  }
 
   <!-- Barra de Estado -->
   <div class="h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600"></div>

@@ -4,371 +4,86 @@
   <div class="p-5 border-b border-gray-700/50 bg-gray-800/20">
     <div class="flex items-center justify-between mb-4">
       <h2 class="font-bold text-lg flex items-center gap-2">
-        <span class="text-2xl">⚡</span>
+        <span class="material-icons text-yellow-400">bolt</span>
         Acciones Rápidas
       </h2>
-      <span class="px-3 py-1 bg-blue-500/20 text-blue-400 text-xs rounded-full">5 AP disponibles</span>
+      <span class="px-3 py-1 bg-blue-500/20 text-blue-400 text-xs rounded-full">{{points}} AP</span>
     </div>
     <div class="text-sm text-gray-400">
       Gasta tus Puntos de Acción para avanzar más rápido
     </div>
   </div>
 
-  <!-- Categoría: EMPLEO -->
+  <!-- Iterar sobre categorías -->
+  @for (category of actionCategories; track category.id) {
   <div class="p-4 border-b border-gray-700/50">
     <div class="flex items-center gap-2 mb-4">
-      <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-      <h3 class="text-sm font-bold text-gray-300 uppercase tracking-wider">💼 EMPLEO</h3>
-      <span class="ml-auto text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded">2 AP</span>
+      <div class="w-2 h-2 rounded-full" [ngClass]="'bg-' + category.color + '-500'"></div>
+      <h3 class="text-sm font-bold text-gray-300 uppercase tracking-wider">{{category.icon}} {{category.name}}</h3>
+      <span class="ml-auto text-xs px-2 py-1 rounded" [ngClass]="'bg-' + category.color + '-500/20 text-' + category.color + '-400'">
+        {{category.badge}}
+      </span>
     </div>
     <div class="space-y-2">
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-blue-500/30">
+      @for (action of category.actions; track action.title) {
+      <button
+        class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent"
+        [ngClass]="'hover:border-' + category.color + '-500/30'"
+        (click)="executeAction(action)">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">📝</span>
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center" [ngClass]="'bg-' + category.color + '-500/20'">
+            <span class="text-lg">{{action.icon}}</span>
           </div>
           <div class="text-left">
-            <div class="font-medium text-sm">Actualizar CV</div>
-            <div class="text-xs text-gray-400">Mejora tu perfil profesional</div>
+            <div class="font-medium text-sm">{{action.title}}</div>
+            <div class="text-xs text-gray-400">{{action.description}}</div>
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <span class="text-xs text-blue-400">+15 XP</span>
-          <span class="text-lg group-hover:translate-x-1 transition-transform">→</span>
-        </div>
-      </button>
+          @if (action.cost) {
+            @if (action.costType === 'ap') {
+              <span class="text-xs px-2 py-1 rounded" [ngClass]="'bg-' + category.color + '-500/20 text-' + category.color + '-400'">
+                {{action.cost}} AP
+              </span>
+            } @else if (action.costType === 'money') {
+              <span class="text-xs px-2 py-1 bg-amber-500/20 text-amber-400 rounded">
+                €{{action.cost}}
+              </span>
+            } @else if (action.costType === 'requirement') {
+              <span class="text-xs px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded">
+                {{action.cost}}
+              </span>
+            }
+          }
 
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-blue-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">🎯</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Buscar Trabajo</div>
-            <div class="text-xs text-gray-400">3 ofertas disponibles</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded">2 AP</span>
-          <span class="text-lg group-hover:translate-x-1 transition-transform">→</span>
-        </div>
-      </button>
+          @if (action.reward) {
+            <span class="text-xs" [ngClass]="'text-' + category.color + '-400'">
+              {{action.reward}}
+            </span>
+          }
 
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-blue-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">📊</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Solicitar Ascenso</div>
-            <div class="text-xs text-gray-400">Reunión con jefe</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs text-yellow-400">Requisito: Nivel 5</span>
+          @if (action.showArrow) {
+            <span class="text-lg group-hover:translate-x-1 transition-transform">→</span>
+          }
         </div>
       </button>
+      }
     </div>
   </div>
-
-  <!-- Categoría: FORMACIÓN -->
-  <div class="p-4 border-b border-gray-700/50">
-    <div class="flex items-center gap-2 mb-4">
-      <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
-      <h3 class="text-sm font-bold text-gray-300 uppercase tracking-wider">🎓 FORMACIÓN</h3>
-      <span class="ml-auto text-xs px-2 py-1 bg-purple-500/20 text-purple-400 rounded">1-3 AP</span>
-    </div>
-    <div class="space-y-2">
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-purple-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">📚</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Curso Online</div>
-            <div class="text-xs text-gray-400">React Avanzado (8h)</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-1 bg-purple-500/20 text-purple-400 rounded">3 AP</span>
-          <span class="text-xs text-purple-400">+200 XP</span>
-        </div>
-      </button>
-
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-purple-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">🎤</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Taller Presencial</div>
-            <div class="text-xs text-gray-400">Habilidades Blandas</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-1 bg-purple-500/20 text-purple-400 rounded">2 AP</span>
-          <span class="text-xs text-purple-400">+150 XP</span>
-        </div>
-      </button>
-
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-purple-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">🏆</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Certificación</div>
-            <div class="text-xs text-gray-400">AWS Developer</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-1 bg-purple-500/20 text-purple-400 rounded">4 AP</span>
-          <span class="text-xs text-amber-400">+50% salario</span>
-        </div>
-      </button>
-    </div>
-  </div>
-
-  <!-- Categoría: FINANZAS -->
-  <div class="p-4 border-b border-gray-700/50">
-    <div class="flex items-center gap-2 mb-4">
-      <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
-      <h3 class="text-sm font-bold text-gray-300 uppercase tracking-wider">💰 FINANZAS</h3>
-      <span class="ml-auto text-xs px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded">Capital: €12,500</span>
-    </div>
-    <div class="space-y-2">
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-emerald-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">📈</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Invertir en Bolsa</div>
-            <div class="text-xs text-gray-400">Mínimo €500</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded">Riesgo: Medio</span>
-          <span class="text-lg group-hover:translate-x-1 transition-transform">→</span>
-        </div>
-      </button>
-
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-emerald-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">🏦</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Abrir Cuenta Ahorro</div>
-            <div class="text-xs text-gray-400">2.5% interés anual</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs text-emerald-400">Sin AP</span>
-          <span class="text-lg group-hover:translate-x-1 transition-transform">→</span>
-        </div>
-      </button>
-
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-emerald-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">💳</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Solicitar Crédito</div>
-            <div class="text-xs text-gray-400">Hasta €20,000</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-1 bg-amber-500/20 text-amber-400 rounded">Deuda: -15%</span>
-        </div>
-      </button>
-    </div>
-  </div>
-
-  <!-- Categoría: SALUD & BIENESTAR -->
-  <div class="p-4 border-b border-gray-700/50">
-    <div class="flex items-center gap-2 mb-4">
-      <div class="w-2 h-2 bg-pink-500 rounded-full"></div>
-      <h3 class="text-sm font-bold text-gray-300 uppercase tracking-wider">❤️ SALUD & BIENESTAR</h3>
-      <span class="ml-auto text-xs px-2 py-1 bg-pink-500/20 text-pink-400 rounded">Salud: 90%</span>
-    </div>
-    <div class="space-y-2">
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-pink-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-pink-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">🏋️</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Ir al Gimnasio</div>
-            <div class="text-xs text-gray-400">+10% energía</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-1 bg-pink-500/20 text-pink-400 rounded">1 AP</span>
-          <span class="text-xs text-pink-400">2h</span>
-        </div>
-      </button>
-
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-pink-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-pink-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">🛌</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Descansar</div>
-            <div class="text-xs text-gray-400">Recuperar energía</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs text-pink-400">+40% energía</span>
-          <span class="text-lg group-hover:translate-x-1 transition-transform">→</span>
-        </div>
-      </button>
-
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-pink-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-pink-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">🍎</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Consulta Médica</div>
-            <div class="text-xs text-gray-400">Chequeo anual</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-1 bg-pink-500/20 text-pink-400 rounded">€150</span>
-          <span class="text-xs text-pink-400">+20% salud</span>
-        </div>
-      </button>
-    </div>
-  </div>
-
-  <!-- Categoría: VIDA SOCIAL -->
-  <div class="p-4 border-b border-gray-700/50">
-    <div class="flex items-center gap-2 mb-4">
-      <div class="w-2 h-2 bg-amber-500 rounded-full"></div>
-      <h3 class="text-sm font-bold text-gray-300 uppercase tracking-wider">👥 VIDA SOCIAL</h3>
-      <span class="ml-auto text-xs px-2 py-1 bg-amber-500/20 text-amber-400 rounded">35 contactos</span>
-    </div>
-    <div class="space-y-2">
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-amber-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">🤝</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Networking Event</div>
-            <div class="text-xs text-gray-400">Conferencia Tech</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-1 bg-amber-500/20 text-amber-400 rounded">2 AP</span>
-          <span class="text-xs text-amber-400">+10 contactos</span>
-        </div>
-      </button>
-
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-amber-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">🎉</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Salir con Amigos</div>
-            <div class="text-xs text-gray-400">+15% felicidad</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-1 bg-amber-500/20 text-amber-400 rounded">€50</span>
-          <span class="text-xs text-amber-400">3h</span>
-        </div>
-      </button>
-
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-amber-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">💑</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Cita Romántica</div>
-            <div class="text-xs text-gray-400">Restaurante elegante</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-1 bg-amber-500/20 text-amber-400 rounded">€120</span>
-          <span class="text-xs text-amber-400">+25% felicidad</span>
-        </div>
-      </button>
-    </div>
-  </div>
-
-  <!-- Categoría: VIVIENDA -->
-  <div class="p-4">
-    <div class="flex items-center gap-2 mb-4">
-      <div class="w-2 h-2 bg-indigo-500 rounded-full"></div>
-      <h3 class="text-sm font-bold text-gray-300 uppercase tracking-wider">🏠 VIVIENDA</h3>
-      <span class="ml-auto text-xs px-2 py-1 bg-indigo-500/20 text-indigo-400 rounded">Estudio €800/mes</span>
-    </div>
-    <div class="space-y-2">
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-indigo-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-indigo-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">🏢</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Buscar Apartamento</div>
-            <div class="text-xs text-gray-400">Mejorar vivienda</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-1 bg-indigo-500/20 text-indigo-400 rounded">1 AP</span>
-          <span class="text-lg group-hover:translate-x-1 transition-transform">→</span>
-        </div>
-      </button>
-
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-indigo-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-indigo-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">🛋️</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Amueblar Casa</div>
-            <div class="text-xs text-gray-400">Muebles nuevos</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-1 bg-indigo-500/20 text-indigo-400 rounded">€2,000</span>
-          <span class="text-xs text-indigo-400">+10% comodidad</span>
-        </div>
-      </button>
-
-      <button class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent hover:border-indigo-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-indigo-500/20 rounded-lg flex items-center justify-center">
-            <span class="text-lg">🏡</span>
-          </div>
-          <div class="text-left">
-            <div class="font-medium text-sm">Comprar Casa</div>
-            <div class="text-xs text-gray-400">Propiedad propia</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-1 bg-red-500/20 text-red-400 rounded">€150,000</span>
-          <span class="text-xs text-gray-400">Requisito: Capital €30k</span>
-        </div>
-      </button>
-    </div>
-  </div>
+  }
 
   <!-- Footer de Acciones -->
   <div class="mt-auto p-4 border-t border-gray-700/50 bg-gray-800/20">
     <div class="flex items-center justify-between">
       <div class="text-sm text-gray-400">
-        <div>Puntos de Acción disponibles: <span class="font-bold text-blue-400">5</span></div>
+        <div>Puntos de Acción disponibles: <span class="font-bold text-blue-400">{{points}}</span></div>
         <div class="text-xs">Se regeneran: <span class="text-emerald-400">3 por día</span></div>
       </div>
-      <button class="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg text-sm font-medium transition-all">
-        Usar Todos (5 AP)
+      <button
+        class="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg text-sm font-medium transition-all"
+        (click)="useAllPoints()"
+        [disabled]="points === 0">
+        Usar Todos ({{points}} AP)
       </button>
     </div>
   </div>

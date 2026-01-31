@@ -1,7 +1,9 @@
 <div
   class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100 overflow-hidden"
 >
-  <app-header></app-header>
+  <app-header [systemData]="data"></app-header>
+  <app-footer [systemData]="data" (systemDataEmmiter)="avanceData($event)"></app-footer>
+
   <main class="flex flex-1 overflow-hidden">
     <app-sidebar></app-sidebar>
     <!-- CONTENIDO PRINCIPAL -->

@@ -1,1 +1,101 @@
-<p>login works!</p>
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-950 flex items-center justify-center p-4">
+  <div class="w-full max-w-4xl flex">
+    <!-- Panel Izquierdo: Información del Juego -->
+    <div class="hidden md:flex flex-1 bg-gradient-to-br from-blue-900/30 to-purple-900/30 rounded-l-2xl border border-gray-700/50 p-8 flex-col justify-between">
+      <div>
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
+            <span class="text-2xl">👨‍💼</span>
+          </div>
+          <div>
+            <h1 class="text-2xl text-gray-100 font-bold">
+              Career Life Manager
+            </h1>
+            <p class="text-gray-400">2025 Edition</p>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center mt-1">
+              <span class="text-lg">🎮</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-2 text-gray-100">
+                Bienvenido de vuelta
+              </h3>
+              <p class="text-gray-300">
+                Continúa tu viaje profesional donde lo dejaste. Tus logros te esperan.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center mt-1">
+              <span class="text-lg">📈</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-2 text-gray-100">
+                Revisa tu progreso
+              </h3>
+              <p class="text-gray-300">
+                Consulta tus estadísticas, logros desbloqueados y próximos objetivos.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center mt-1">
+              <span class="text-lg">🤝</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-2 text-gray-100">
+                Conecta con otros
+              </h3>
+              <p class="text-gray-300">
+                Interactúa con la comunidad de profesionales y comparte experiencias.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-gray-800/40 rounded-xl p-4 border border-gray-700/50">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
+            <span class="text-lg">🚀</span>
+          </div>
+          <div>
+            <div class="font-bold">Tu carrera te espera</div>
+            <div class="text-sm text-gray-400">
+              Más de 50,000 profesionales ya están mejorando sus habilidades
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="flex-1 bg-gray-800/30 border border-gray-700/50 md:border-l-0 rounded-2xl md:rounded-l-none rounded-r-2xl p-8"
+    >
+      <div class="max-w-md mx-auto">
+        <div class="text-center mb-8">
+          <h2 class="text-3xl font-bold mb-2 text-gray-100">Autentificación</h2>
+        </div>
+
+        <!-- En el template del componente padre -->
+        <app-form-dynamic
+          [config]="registrationConfig"
+          [isLoading]="isLoading"
+          [isLogin]="true"
+          [isRegister]="false"
+          (formSubmit)="onFormSubmit($event)"
+          (socialLogin)="onSocialLogin($event)"
+        >
+        </app-form-dynamic>
+      </div>
+    </div>
+  </div>
+</div>
+
+
