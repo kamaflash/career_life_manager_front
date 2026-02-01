@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Action, ActionCategory } from '../../../../core/interfaces';
+import { Action, ActionCard, ActionCategory, Formation } from '../../../../core/interfaces';
+import { environment } from '../../../../../enviroments/environment';
+import { UserService } from '../../../../core/services/users/users.service';
+import { BaseService } from '../../../../core/services/base/base-service.service';
+const endpoint = environment.baseUrlSpring;
 
 
 @Component({
@@ -13,9 +17,10 @@ import { Action, ActionCategory } from '../../../../core/interfaces';
 export class SidebarComponent  implements OnInit {
   points = 5;
   actionCategories: ActionCategory[] = [];
-
+  constructor(private userService: UserService, private baseService: BaseService) { }
   ngOnInit() {
     this.initializeActionCategories();
+    this.getFormation();
   }
 
   initializeActionCategories() {
@@ -28,22 +33,22 @@ export class SidebarComponent  implements OnInit {
         badge: '2 AP',
         actions: [
           {
-            title: 'Buscar Trabajo',
+            name: 'Buscar Trabajo',
             description: '3 ofertas disponibles',
             icon: '🎯',
             cost: 2,
             costType: 'ap',
-            reward: undefined,
+            academicXpReward: undefined,
             showArrow: true,
             execute: () => this.searchJob()
           },
           {
-            title: 'Solicitar Ascenso',
+            name: 'Solicitar Ascenso',
             description: 'Reunión con jefe',
             icon: '📊',
             cost: 'Nivel 5',
             costType: 'requirement',
-            reward: undefined,
+            academicXpReward: undefined,
             showArrow: false,
             execute: () => this.requestPromotion()
           }
@@ -57,32 +62,32 @@ export class SidebarComponent  implements OnInit {
         badge: '1-3 AP',
         actions: [
           {
-            title: 'Curso Online',
+            name: 'Curso Online',
             description: 'React Avanzado (8h)',
             icon: '📚',
             cost: 3,
             costType: 'ap',
-            reward: '+200 XP',
+            academicXpReward: '+200 XP',
             showArrow: false,
             execute: () => this.takeCourse()
           },
           {
-            title: 'Taller Presencial',
+            name: 'Taller Presencial',
             description: 'Habilidades Blandas',
             icon: '🎤',
             cost: 2,
             costType: 'ap',
-            reward: '+150 XP',
+            academicXpReward: '+150 XP',
             showArrow: false,
             execute: () => this.attendWorkshop()
           },
           {
-            title: 'Certificación',
+            name: 'Certificación',
             description: 'AWS Developer',
             icon: '🏆',
             cost: 4,
             costType: 'ap',
-            reward: '+50% salario',
+            academicXpReward: '+50% salario',
             showArrow: false,
             execute: () => this.getCertification()
           }
@@ -96,32 +101,32 @@ export class SidebarComponent  implements OnInit {
         badge: 'Capital: €12,500',
         actions: [
           {
-            title: 'Invertir en Bolsa',
+            name: 'Invertir en Bolsa',
             description: 'Mínimo €500',
             icon: '📈',
             cost: 'Riesgo: Medio',
             costType: 'requirement',
-            reward: undefined,
+            academicXpReward: undefined,
             showArrow: true,
             execute: () => this.investStock()
           },
           {
-            title: 'Abrir Cuenta Ahorro',
+            name: 'Abrir Cuenta Ahorro',
             description: '2.5% interés anual',
             icon: '🏦',
             cost: undefined,
             costType: 'none',
-            reward: 'Sin AP',
+            academicXpReward: 'Sin AP',
             showArrow: true,
             execute: () => this.openSavingsAccount()
           },
           {
-            title: 'Solicitar Crédito',
+            name: 'Solicitar Crédito',
             description: 'Hasta €20,000',
             icon: '💳',
             cost: 'Deuda: -15%',
             costType: 'requirement',
-            reward: undefined,
+            academicXpReward: undefined,
             showArrow: false,
             execute: () => this.requestLoan()
           }
@@ -135,32 +140,32 @@ export class SidebarComponent  implements OnInit {
         badge: 'Salud: 90%',
         actions: [
           {
-            title: 'Ir al Gimnasio',
+            name: 'Ir al Gimnasio',
             description: '+10% energía',
             icon: '🏋️',
             cost: 1,
             costType: 'ap',
-            reward: '2h',
+            academicXpReward: '2h',
             showArrow: false,
             execute: () => this.goGym()
           },
           {
-            title: 'Descansar',
+            name: 'Descansar',
             description: 'Recuperar energía',
             icon: '🛌',
             cost: undefined,
             costType: 'none',
-            reward: '+40% energía',
+            academicXpReward: '+40% energía',
             showArrow: true,
             execute: () => this.rest()
           },
           {
-            title: 'Consulta Médica',
+            name: 'Consulta Médica',
             description: 'Chequeo anual',
             icon: '🍎',
             cost: 150,
             costType: 'money',
-            reward: '+20% salud',
+            academicXpReward: '+20% salud',
             showArrow: false,
             execute: () => this.medicalCheckup()
           }
@@ -174,32 +179,32 @@ export class SidebarComponent  implements OnInit {
         badge: '35 contactos',
         actions: [
           {
-            title: 'Networking Event',
+            name: 'Networking Event',
             description: 'Conferencia Tech',
             icon: '🤝',
             cost: 2,
             costType: 'ap',
-            reward: '+10 contactos',
+            academicXpReward: '+10 contactos',
             showArrow: false,
             execute: () => this.networkingEvent()
           },
           {
-            title: 'Salir con Amigos',
+            name: 'Salir con Amigos',
             description: '+15% felicidad',
             icon: '🎉',
             cost: 50,
             costType: 'money',
-            reward: '3h',
+            academicXpReward: '3h',
             showArrow: false,
             execute: () => this.goOutWithFriends()
           },
           {
-            title: 'Cita Romántica',
+            name: 'Cita Romántica',
             description: 'Restaurante elegante',
             icon: '💑',
             cost: 120,
             costType: 'money',
-            reward: '+25% felicidad',
+            academicXpReward: '+25% felicidad',
             showArrow: false,
             execute: () => this.romanticDate()
           }
@@ -213,32 +218,32 @@ export class SidebarComponent  implements OnInit {
         badge: 'Estudio €800/mes',
         actions: [
           {
-            title: 'Buscar Apartamento',
+            name: 'Buscar Apartamento',
             description: 'Mejorar vivienda',
             icon: '🏢',
             cost: 1,
             costType: 'ap',
-            reward: undefined,
+            academicXpReward: undefined,
             showArrow: true,
             execute: () => this.searchApartment()
           },
           {
-            title: 'Amueblar Casa',
+            name: 'Amueblar Casa',
             description: 'Muebles nuevos',
             icon: '🛋️',
             cost: 2000,
             costType: 'money',
-            reward: '+10% comodidad',
+            academicXpReward: '+10% comodidad',
             showArrow: false,
             execute: () => this.furnishHouse()
           },
           {
-            title: 'Comprar Casa',
+            name: 'Comprar Casa',
             description: 'Propiedad propia',
             icon: '🏡',
             cost: '€150,000',
             costType: 'requirement',
-            reward: 'Requisito: Capital €30k',
+            academicXpReward: 'Requisito: Capital €30k',
             showArrow: false,
             execute: () => this.buyHouse()
           }
@@ -352,4 +357,51 @@ export class SidebarComponent  implements OnInit {
     console.log('Comprando casa...');
     // Lógica para comprar casa
   }
+
+  getFormation() {
+    const url:string = endpoint + "trainer/character/"+this.userService.user?.persons?.id+"/available"
+
+    this.baseService.getItems(url).subscribe({
+      next: (resp:any) => {
+        this.actionCategories[1].actions = [resp.formations]; // Limpiar acciones actuales
+
+        this.actionCategories[1].actions = resp.formations.map((f:any) =>
+  this.mapFormationToAction(f, (formation:any) => {
+
+  })
+);
+      },
+      error: (err) => {
+        console.error('Error fetching formation data', err);
+      }
+    });
+  }
+
+  mapFormationToAction(
+  formation: Formation,
+  onExecute: (formation: Formation) => void
+): ActionCard {
+  return {
+    id: formation.id,
+    name: formation.name,
+    description: `${formation.durationHours}h · ${formation.difficulty}`,
+    icon: this.getIconByCategory(formation.category),
+    cost: formation.effort,
+    costType: 'ap',
+    academicXpReward: `+${formation.academicXpReward} XP`,
+    showArrow: false,
+    execute: () => onExecute(formation)
+  };
+}
+getIconByCategory(category: string): string {
+  switch (category) {
+    case 'technology': return '💻';
+    case 'business': return '📊';
+    case 'health': return '🩺';
+    case 'creative': return '🎨';
+    case 'sports': return '🏋️';
+    case 'science': return '🔬';
+    default: return '📚';
+  }
+}
 }

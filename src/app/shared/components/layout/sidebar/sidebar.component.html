@@ -25,7 +25,7 @@
       </span>
     </div>
     <div class="space-y-2">
-      @for (action of category.actions; track action.title) {
+      @for (action of category.actions; track action.name) {
       <button
         class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent"
         [ngClass]="'hover:border-' + category.color + '-500/30'"
@@ -35,30 +35,21 @@
             <span class="text-lg">{{action.icon}}</span>
           </div>
           <div class="text-left">
-            <div class="font-medium text-sm">{{action.title}}</div>
+            <div class="font-medium text-sm">{{action.name}}</div>
             <div class="text-xs text-gray-400">{{action.description}}</div>
           </div>
         </div>
         <div class="flex items-center gap-2">
           @if (action.cost) {
-            @if (action.costType === 'ap') {
+
               <span class="text-xs px-2 py-1 rounded" [ngClass]="'bg-' + category.color + '-500/20 text-' + category.color + '-400'">
                 {{action.cost}} AP
               </span>
-            } @else if (action.costType === 'money') {
-              <span class="text-xs px-2 py-1 bg-amber-500/20 text-amber-400 rounded">
-                €{{action.cost}}
-              </span>
-            } @else if (action.costType === 'requirement') {
-              <span class="text-xs px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded">
-                {{action.cost}}
-              </span>
-            }
           }
 
-          @if (action.reward) {
+          @if (action.academicXpReward) {
             <span class="text-xs" [ngClass]="'text-' + category.color + '-400'">
-              {{action.reward}}
+              {{action.academicXpReward}}
             </span>
           }
 

@@ -134,12 +134,12 @@ export interface CharacterExpenses {
   other: number;
 }
 export interface Action {
-  title: string;
+  name: string;
   description: string;
   icon: string;
   cost?: number | string;
   costType?: 'ap' | 'money' | 'requirement' | 'none';
-  reward?: string;
+  academicXpReward?: string;
   showArrow?: boolean;
   execute: () => void;
 }
@@ -161,3 +161,36 @@ export type ProgressLevel =
   | 'LEVEL_5';
 
 
+export interface Formation {
+  id: number;
+  code: string;
+  name: string;
+  description: string;
+  category: string;
+  type: 'COURSE' | 'WORKSHOP' | 'CERTIFICATION';
+  difficulty: 'BASIC' | 'INTERMEDIATE' | 'ADVANCED';
+
+  minEducationLevel: string;
+  minAcademicLevel: number;
+  minAcademicXp: number;
+  maxAcademicXp: number;
+
+  durationHours: number;
+  cost: number;
+  effort: number;
+  academicXpReward: number;
+
+  repeatable: boolean;
+  active: boolean;
+}
+export interface ActionCard {
+  id: number;
+  name: string;
+  description: string;
+  icon: string;
+  cost: number;
+  costType: 'ap' | 'money';
+  academicXpReward: string;
+  showArrow: boolean;
+  execute: () => void;
+}

@@ -24,7 +24,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       university: 'Estudiante Universitario',
       working: 'Trabajando',
       unemployed: 'Desempleado',
-      training: 'Formación',
+      vocational_training: 'F.P. / Formación Profesional',
       other: 'Otro',
     },
 
@@ -183,6 +183,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       savings: null,
       debts: null,
       expenses: null,
+      academicXp: null,
       challenges: [],
       supportSystem: [],
       longTermGoals: ['stable_career', 'travel'],
@@ -241,16 +242,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
             type: 'list',
           },
           {
-            label: 'Recursos de Aprendizaje',
-            value: this.playerData?.learningResources || [],
+            label: 'Puntos experiencia',
+            value: this.playerData?.academicXp + " px" || 0 + " px",
             icon: '📖',
-            type: 'list',
           },
           {
-            label: 'Vacíos Educativos',
-            value: this.playerData?.educationGaps || [],
+            label: 'Nivel formación',
+            value: this.returnLevel(this.playerData?.academicLevel),
             icon: '⚠️',
-            type: 'list',
           },
         ],
       },
@@ -771,6 +770,19 @@ export class ProfileComponent implements OnInit, OnDestroy {
         return 'low';
       default:
         return 'low';
+    }
+  }
+
+  returnLevel(score: string): string {
+    switch (score) {
+      case "LEVEL_1":
+        return '1';
+      case "LEVEL_2":
+        return "2";
+      case "LEVEL_3":
+    return "3";
+    default:
+        return "1";
     }
   }
 }

@@ -7,6 +7,8 @@ import { environment } from '../../../../enviroments/environment';
 import { BaseService } from '../../../core/services/base/base-service.service';
 import { Router } from '@angular/router';
 import { UserService } from '../../../core/services/users/users.service';
+import { PROVINCIAS_ESPAÑA } from '../../../core/constantes';
+
 const endpoint = environment.baseUrlSpring + 'persons';
 
 @Component({
@@ -19,9 +21,10 @@ export class CreatePersonComponent implements OnInit {
   isLoading: boolean = false;
   characterPreview: CharacterPreview = {
     fullName: 'Nuevo Personaje',
-    age: 16,
+    age: 0,
     currentSituation: 'high_school',
-    city: 'madrid',
+    city: { label: 'Madrid', value: 'madrid', avgRoomRent: 600 },
+    residentialCity: 'si',
     careerInterest: 'technology',
     aspiration: 'university',
     economicSupport: 'partial_support',
@@ -64,462 +67,356 @@ export class CreatePersonComponent implements OnInit {
   // Configuración del formulario de creación de personaje
   characterConfig: FormConfig = {
     sections: [
-      // Sección 1: Información Básica
+  // Sección 1: Información Básica
+  {
+    title: 'Información Personal',
+    icon: 'person',
+    description: 'Datos básicos de tu personaje',
+    fields: [
       {
-        title: 'Información Personal',
-        icon: '👤',
-        description: 'Datos básicos de tu personaje',
-        fields: [
+        name: 'fullName',
+        label: 'Nombre completo',
+        type: 'text',
+        icon: 'badge',
+        placeholder: 'Ej: Carlos Rodríguez Pérez',
+        required: true,
+        fullWidth: true,
+        max: 50,
+      },
+      {
+        name: 'birthDate',
+        label: 'Fecha de nacimiento',
+        type: 'date',
+        icon: 'cake',
+        placeholder: 'DD/MM/AAAA',
+        required: true,
+        fullWidth: false,
+        minDate: this.getDateYearsAgo(17),
+        maxDate: this.getDateYearsAgo(16),
+      },
+      {
+        name: 'gender',
+        label: 'Género',
+        type: 'select',
+        icon: 'wc',
+        required: true,
+        fullWidth: false,
+        options: [
+          { label: 'Hombre', value: 'male', icon: 'man' },
+          { label: 'Mujer', value: 'female', icon: 'woman' },
+          { label: 'No binario', value: 'nonbinary', icon: 'person' },
           {
-            name: 'fullName',
-            label: 'Nombre completo',
-            type: 'text',
-            icon: '🏷️',
-            placeholder: 'Ej: Carlos Rodríguez Pérez',
-            required: true,
-            fullWidth: true,
-            max: 50,
-          },
-          {
-            name: 'birthDate',
-            label: 'Fecha de nacimiento',
-            type: 'date',
-            icon: '🎂',
-            placeholder: 'DD/MM/AAAA',
-            required: true,
-            fullWidth: false,
-            minDate: this.getDateYearsAgo(17),
-            maxDate: this.getDateYearsAgo(16),
-          },
-          {
-            name: 'gender',
-            label: 'Género',
-            type: 'select',
-            icon: '⚧️',
-            required: true,
-            fullWidth: false,
-            options: [
-              { label: 'Hombre', value: 'male', icon: '👨' },
-              { label: 'Mujer', value: 'female', icon: '👩' },
-              { label: 'No binario', value: 'nonbinary', icon: '🧑' },
-              {
-                label: 'Prefiero no decirlo',
-                value: 'unspecified',
-                icon: '😊',
-              },
-            ],
-          },
-          {
-            name: 'city',
-            label: 'Ciudad de residencia',
-            type: 'select',
-            icon: '🏙️',
-            required: true,
-            fullWidth: false,
-            options: [
-              { label: 'Madrid', value: 'madrid' },
-              { label: 'Barcelona', value: 'barcelona' },
-              { label: 'Valencia', value: 'valencia' },
-              { label: 'Sevilla', value: 'sevilla' },
-              { label: 'Bilbao', value: 'bilbao' },
-              { label: 'Málaga', value: 'malaga' },
-              { label: 'Zaragoza', value: 'zaragoza' },
-              { label: 'Murcia', value: 'murcia' },
-              { label: 'Palma de Mallorca', value: 'palma' },
-              { label: 'Granada', value: 'granada' },
-            ],
+            label: 'Prefiero no decirlo',
+            value: 'unspecified',
+            icon: 'sentiment_satisfied',
           },
         ],
       },
-
-      // Sección 2: Situación Educativa/Profesional (Ampliado)
       {
-        title: 'Situación Educativa',
-        icon: '🎓',
-        description: '¿Qué estás haciendo actualmente?',
-        fields: [
+        name: 'city',
+        label: 'Ciudad de residencia',
+        type: 'select',
+        icon: 'location_city',
+        required: true,
+        fullWidth: false,
+        options: PROVINCIAS_ESPAÑA,
+      },
+      {
+        name: 'residentialCity',
+        label: 'Residencia familiar',
+        type: 'select',
+        icon: 'home',
+        required: true,
+        fullWidth: false,
+        options: [
+          { label: 'SI, vivo con mi familia', value: 'si' },
+          { label: 'No, alquilo habitación', value: 'no' },
+        ],
+      },
+    ],
+  },
+
+  // Sección 2: Situación Educativa/Profesional
+  {
+    title: 'Situación Educativa',
+    icon: 'school',
+    description: '¿Qué estás haciendo actualmente?',
+    fields: [
+      {
+        name: 'currentSituation',
+        label: 'Situación actual a los 16 años',
+        type: 'difficulty-selector',
+        icon: 'calendar_month',
+        required: true,
+        fullWidth: true,
+        buttons: [
           {
-            name: 'currentSituation',
-            label: 'Situación actual a los 16 años',
-            type: 'difficulty-selector',
-            icon: '📅',
-            required: true,
-            fullWidth: true,
-            buttons: [
-              {
-                label: '🎓 Estudios Secundaria',
-                value: 'high_school',
-                icon: '📚',
-                description: 'Estudiando ESO/Bachillerato',
-              },
-              {
-                label: '🔧 Formación Profesional',
-                value: 'vocational_training',
-                icon: '⚙️',
-                description: 'Cursando FP Básica/Grado Medio',
-              },
-              {
-                label: '⏸️ Sin Estudiar',
-                value: 'not_studying',
-                icon: '🏠',
-                description: 'Sin estudios ni trabajo actual',
-              },
-            ],
+            label: 'Estudios Secundaria',
+            value: 'high_school',
+            icon: 'menu_book',
+            description: 'Estudiando ESO/Bachillerato',
           },
           {
-            name: 'educationLevel',
-            label: 'E.S.O / Formación secundaria alcanzada',
-            type: 'select',
-            icon: '📚',
-            required: true,
-            fullWidth: true,
-            options: [
-              { label: 'Si', value: 'basic' },
-              { label: 'No', value: 'none' },
-            ],
+            label: 'Formación Profesional',
+            value: 'vocational_training',
+            icon: 'settings',
+            description: 'Cursando FP Básica/Grado Medio',
           },
           {
-            name: 'academicPerformance',
-            label: 'Rendimiento académico',
-            type: 'select',
-            icon: '📈',
-            required: false,
-            fullWidth: false,
-            options: [
-              { label: 'Bajo', value: 'low' },
-              { label: 'Promedio', value: 'average' },
-              { label: 'Alto', value: 'high' },
-              { label: 'Excelente', value: 'excellent' },
-            ],
+            label: 'Sin Estudiar',
+            value: 'not_studying',
+            icon: 'home',
+            description: 'Sin estudios ni trabajo actual',
           },
         ],
       },
-
-      // Sección 3: Intereses Profesionales
       {
-        title: 'Intereses y Aspiraciones',
-        icon: '🎯',
-        description: '¿Qué te gustaría hacer en el futuro?',
-        fields: [
-          {
-            name: 'careerInterest',
-            label: 'Área de interés principal',
-            type: 'difficulty-selector',
-            icon: '💼',
-            required: true,
-            fullWidth: true,
-            buttons: [
-              {
-                label: '💻 Tecnología',
-                value: 'technology',
-                icon: '💻',
-                description: 'Informática, programación, IA',
-              },
-              {
-                label: '🏥 Salud',
-                value: 'health',
-                icon: '🩺',
-                description: 'Medicina, enfermería, farmacia',
-              },
-              {
-                label: '🏗️ Construcción',
-                value: 'construction',
-                icon: '🔨',
-                description: 'Arquitectura, ingeniería, obras',
-              },
-              {
-                label: '📊 Negocios',
-                value: 'business',
-                icon: '📈',
-                description: 'Administración, finanzas, marketing',
-              },
-              {
-                label: '🎨 Creativo',
-                value: 'creative',
-                icon: '🎨',
-                description: 'Diseño, arte, música, comunicación',
-              },
-              {
-                label: '⚖️ Social',
-                value: 'social',
-                icon: '🤝',
-                description: 'Educación, psicología, trabajo social',
-              },
-              {
-                label: '🔬 Ciencia',
-                value: 'science',
-                icon: '🧪',
-                description: 'Investigación, biología, química',
-              },
-              {
-                label: '🍽️ Hostelería',
-                value: 'hospitality',
-                icon: '🍴',
-                description: 'Cocina, turismo, restauración',
-              },
-            ],
-          },
+        name: 'educationLevel',
+        label: 'E.S.O / Formación secundaria alcanzada',
+        type: 'select',
+        icon: 'menu_book',
+        required: true,
+        fullWidth: true,
+        options: [
+          { label: 'Si', value: 'basic' },
+          { label: 'No', value: 'none' },
         ],
       },
-
-      // Sección 4: Habilidades y Competencias
       {
-        title: 'Habilidades Personales',
-        icon: '🧠',
-        description: '¿En qué destacas?',
-        fields: [
-          {
-            name: 'strengths',
-            label: 'Fortalezas principales',
-            type: 'checkbox-group',
-            icon: '⭐',
-            required: false,
-            fullWidth: true,
-            maxSelections: 3,
-            options: [
-              {
-                label: 'Matemáticas y lógica',
-                value: 'math_logic',
-                checked: false,
-              },
-              {
-                label: 'Comunicación verbal',
-                value: 'verbal_communication',
-                checked: false,
-              },
-              { label: 'Creatividad', value: 'creativity', checked: false },
-              { label: 'Trabajo en equipo', value: 'teamwork', checked: false },
-              {
-                label: 'Responsabilidad',
-                value: 'responsibility',
-                checked: false,
-              },
-              { label: 'Adaptabilidad', value: 'adaptability', checked: false },
-              { label: 'Liderazgo', value: 'leadership', checked: false },
-              {
-                label: 'Resolución de problemas',
-                value: 'problem_solving',
-                checked: false,
-              },
-            ],
-          },
-          {
-            name: 'technicalSkills',
-            label: 'Habilidades técnicas',
-            type: 'checkbox-group',
-            icon: '🔧',
-            required: false,
-            fullWidth: true,
-            maxSelections: 2,
-            options: [
-              {
-                label: 'Informática básica',
-                value: 'basic_computer',
-                checked: false,
-              },
-              {
-                label: 'Ofimática (Word, Excel)',
-                value: 'office',
-                checked: false,
-              },
-              {
-                label: 'Programación básica',
-                value: 'basic_programming',
-                checked: false,
-              },
-              {
-                label: 'Diseño gráfico',
-                value: 'graphic_design',
-                checked: false,
-              },
-              { label: 'Mecánica', value: 'mechanics', checked: false },
-              { label: 'Electricidad', value: 'electricity', checked: false },
-              { label: 'Cocina', value: 'cooking', checked: false },
-              { label: 'Idiomas', value: 'languages', checked: false },
-            ],
-          },
+        name: 'academicPerformance',
+        label: 'Rendimiento académico',
+        type: 'select',
+        icon: 'trending_up',
+        required: false,
+        fullWidth: false,
+        options: [
+          { label: 'Bajo', value: 'low' },
+          { label: 'Promedio', value: 'average' },
+          { label: 'Alto', value: 'high' },
+          { label: 'Excelente', value: 'excellent' },
         ],
       },
+    ],
+  },
 
-      // Sección 5: Contexto Familiar y Económico (Ampliado)
+  // Sección 3: Intereses Profesionales
+  {
+    title: 'Intereses y Aspiraciones',
+    icon: 'track_changes',
+    description: '¿Qué te gustaría hacer en el futuro?',
+    fields: [
       {
-        title: 'Contexto Familiar y Económico',
-        icon: '👨‍👩‍👧‍👦',
-        description: 'Tu entorno influye en tus oportunidades',
-        fields: [
+        name: 'careerInterest',
+        label: 'Área de interés principal',
+        type: 'difficulty-selector',
+        icon: 'work',
+        required: true,
+        fullWidth: true,
+        buttons: [
           {
-            name: 'familySituation',
-            label: 'Situación familiar',
-            type: 'select',
-            icon: '🏠',
-            required: true,
-            fullWidth: true,
-            options: [
-              {
-                label: 'Familia con recursos estables',
-                value: 'stable_family',
-                description: 'Apoyo económico para estudios',
-              },
-              {
-                label: 'Familia acomodada',
-                value: 'working_family',
-                description: 'Recursos abundantes, economía fluida',
-              },
-              {
-                label: 'Situación complicada',
-                value: 'difficult_situation',
-                description: 'Barreras económicas/sociales importantes',
-              },
-            ],
+            label: 'Tecnología',
+            value: 'technology',
+            icon: 'computer',
+            description: 'Informática, programación, IA',
           },
           {
-            name: 'familyExpectations',
-            label: 'Expectativas familiares',
-            type: 'checkbox-group',
-            icon: '🎭',
-            required: false,
-            fullWidth: true,
-            options: [
-              {
-                label: 'Que estudie una carrera',
-                value: 'expect_university',
-                checked: false,
-              },
-              {
-                label: 'Que aprenda un oficio',
-                value: 'expect_trade',
-                checked: false,
-              },
-              {
-                label: 'Que ayude en el negocio familiar',
-                value: 'expect_family_business',
-                checked: false,
-              },
-              {
-                label: 'Que trabaje cuanto antes',
-                value: 'expect_work',
-                checked: false,
-              },
-              {
-                label: 'Que decida por mí mismo',
-                value: 'expect_independence',
-                checked: false,
-              },
-            ],
-          },
-        ],
-      },
-
-      // Sección 9: Confirmación y Metas
-      {
-        title: 'Metas Finales',
-        icon: '🏁',
-        description: 'Define tus objetivos a largo plazo',
-        fields: [
-          {
-            name: 'longTermGoals',
-            label: 'Metas a 10 años',
-            type: 'checkbox-group',
-            icon: '🎯',
-            required: false,
-            fullWidth: true,
-            maxSelections: 2,
-            options: [
-              {
-                label: 'Tener una carrera estable',
-                value: 'stable_career',
-                checked: false,
-              },
-              {
-                label: 'Crear mi propio negocio',
-                value: 'own_business',
-                checked: false,
-              },
-              {
-                label: 'Viajar y conocer mundo',
-                value: 'travel',
-                checked: false,
-              },
-              { label: 'Formar una familia', value: 'family', checked: false },
-              {
-                label: 'Contribuir a la sociedad',
-                value: 'contribute',
-                checked: false,
-              },
-              {
-                label: 'Ser reconocido en mi campo',
-                value: 'recognition',
-                checked: false,
-              },
-              {
-                label: 'Equilibrio vida-trabajo',
-                value: 'work_life_balance',
-                checked: false,
-              },
-              {
-                label: 'Independencia financiera',
-                value: 'financial_independence',
-                checked: false,
-              },
-            ],
+            label: 'Salud',
+            value: 'health',
+            icon: 'medical_services',
+            description: 'Medicina, enfermería, farmacia',
           },
           {
-            name: 'shortTermGoals',
-            label: 'Metas inmediatas (1-2 años)',
-            type: 'checkbox-group',
-            icon: '📅',
-            required: false,
-            fullWidth: true,
-            maxSelections: 3,
-            options: [
-              {
-                label: 'Terminar mis estudios actuales',
-                value: 'finish_studies',
-                checked: false,
-              },
-              {
-                label: 'Aprender una nueva habilidad',
-                value: 'learn_skill',
-                checked: false,
-              },
-              {
-                label: 'Conseguir mi primer trabajo',
-                value: 'first_job',
-                checked: false,
-              },
-              { label: 'Ahorrar dinero', value: 'save_money', checked: false },
-              {
-                label: 'Mejorar mis notas',
-                value: 'improve_grades',
-                checked: false,
-              },
-              {
-                label: 'Hacer nuevos amigos',
-                value: 'new_friends',
-                checked: false,
-              },
-              {
-                label: 'Participar en actividades extraescolares',
-                value: 'extracurricular',
-                checked: false,
-              },
-              {
-                label: 'Tomar decisiones sobre mi futuro',
-                value: 'future_decisions',
-                checked: false,
-              },
-            ],
+            label: 'Construcción',
+            value: 'construction',
+            icon: 'construction',
+            description: 'Arquitectura, ingeniería, obras',
           },
           {
-            name: 'submit',
-            label: '¡Comenzar mi Viaje Profesional!',
-            type: 'submit-button',
-            icon: '🚀',
-            fullWidth: true,
+            label: 'Negocios',
+            value: 'business',
+            icon: 'trending_up',
+            description: 'Administración, finanzas, marketing',
+          },
+          {
+            label: 'Creativo',
+            value: 'creative',
+            icon: 'palette',
+            description: 'Diseño, arte, música, comunicación',
+          },
+          {
+            label: 'Social',
+            value: 'social',
+            icon: 'groups',
+            description: 'Educación, psicología, trabajo social',
+          },
+          {
+            label: 'Ciencia',
+            value: 'science',
+            icon: 'science',
+            description: 'Investigación, biología, química',
+          },
+          {
+            label: 'Hostelería',
+            value: 'hospitality',
+            icon: 'restaurant',
+            description: 'Cocina, turismo, restauración',
           },
         ],
       },
     ],
+  },
+
+  // Sección 4: Habilidades y Competencias
+  {
+    title: 'Habilidades Personales',
+    icon: 'psychology',
+    description: '¿En qué destacas?',
+    fields: [
+      {
+        name: 'strengths',
+        label: 'Fortalezas principales',
+        type: 'checkbox-group',
+        icon: 'star',
+        required: false,
+        fullWidth: true,
+        maxSelections: 3,
+        options: [
+          { label: 'Matemáticas y lógica', value: 'math_logic', checked: false },
+          { label: 'Comunicación verbal', value: 'verbal_communication', checked: false },
+          { label: 'Creatividad', value: 'creativity', checked: false },
+          { label: 'Trabajo en equipo', value: 'teamwork', checked: false },
+          { label: 'Responsabilidad', value: 'responsibility', checked: false },
+          { label: 'Adaptabilidad', value: 'adaptability', checked: false },
+          { label: 'Liderazgo', value: 'leadership', checked: false },
+          { label: 'Resolución de problemas', value: 'problem_solving', checked: false },
+        ],
+      },
+      {
+        name: 'technicalSkills',
+        label: 'Habilidades técnicas',
+        type: 'checkbox-group',
+        icon: 'build',
+        required: false,
+        fullWidth: true,
+        maxSelections: 2,
+        options: [
+          { label: 'Informática básica', value: 'basic_computer', checked: false },
+          { label: 'Ofimática (Word, Excel)', value: 'office', checked: false },
+          { label: 'Programación básica', value: 'basic_programming', checked: false },
+          { label: 'Diseño gráfico', value: 'graphic_design', checked: false },
+          { label: 'Mecánica', value: 'mechanics', checked: false },
+          { label: 'Electricidad', value: 'electricity', checked: false },
+          { label: 'Cocina', value: 'cooking', checked: false },
+          { label: 'Idiomas', value: 'languages', checked: false },
+        ],
+      },
+    ],
+  },
+
+  // Sección 5: Contexto Familiar y Económico
+  {
+    title: 'Contexto Familiar y Económico',
+    icon: 'family_restroom',
+    description: 'Tu entorno influye en tus oportunidades',
+    fields: [
+      {
+        name: 'familySituation',
+        label: 'Situación familiar',
+        type: 'select',
+        icon: 'home',
+        required: true,
+        fullWidth: true,
+        options: [
+          {
+            label: 'Familia con recursos estables',
+            value: 'stable_family',
+            description: 'Apoyo económico para estudios',
+          },
+          {
+            label: 'Familia acomodada',
+            value: 'working_family',
+            description: 'Recursos abundantes, economía fluida',
+          },
+          {
+            label: 'Situación complicada',
+            value: 'difficult_situation',
+            description: 'Barreras económicas/sociales importantes',
+          },
+        ],
+      },
+      {
+        name: 'familyExpectations',
+        label: 'Expectativas familiares',
+        type: 'checkbox-group',
+        icon: 'theater_comedy',
+        required: false,
+        fullWidth: true,
+        options: [
+          { label: 'Que estudie una carrera', value: 'expect_university', checked: false },
+          { label: 'Que aprenda un oficio', value: 'expect_trade', checked: false },
+          { label: 'Que ayude en el negocio familiar', value: 'expect_family_business', checked: false },
+          { label: 'Que trabaje cuanto antes', value: 'expect_work', checked: false },
+          { label: 'Que decida por mí mismo', value: 'expect_independence', checked: false },
+        ],
+      },
+    ],
+  },
+
+  // Sección 9: Confirmación y Metas
+  {
+    title: 'Metas Finales',
+    icon: 'flag',
+    description: 'Define tus objetivos a largo plazo',
+    fields: [
+      {
+        name: 'longTermGoals',
+        label: 'Metas a 10 años',
+        type: 'checkbox-group',
+        icon: 'target',
+        required: false,
+        fullWidth: true,
+        maxSelections: 2,
+        options: [
+          { label: 'Tener una carrera estable', value: 'stable_career', checked: false },
+          { label: 'Crear mi propio negocio', value: 'own_business', checked: false },
+          { label: 'Viajar y conocer mundo', value: 'travel', checked: false },
+          { label: 'Formar una familia', value: 'family', checked: false },
+          { label: 'Contribuir a la sociedad', value: 'contribute', checked: false },
+          { label: 'Ser reconocido en mi campo', value: 'recognition', checked: false },
+          { label: 'Equilibrio vida-trabajo', value: 'work_life_balance', checked: false },
+          { label: 'Independencia financiera', value: 'financial_independence', checked: false },
+        ],
+      },
+      {
+        name: 'shortTermGoals',
+        label: 'Metas inmediatas (1-2 años)',
+        type: 'checkbox-group',
+        icon: 'calendar_month',
+        required: false,
+        fullWidth: true,
+        maxSelections: 3,
+        options: [
+          { label: 'Terminar mis estudios actuales', value: 'finish_studies', checked: false },
+          { label: 'Aprender una nueva habilidad', value: 'learn_skill', checked: false },
+          { label: 'Conseguir mi primer trabajo', value: 'first_job', checked: false },
+          { label: 'Ahorrar dinero', value: 'save_money', checked: false },
+          { label: 'Mejorar mis notas', value: 'improve_grades', checked: false },
+          { label: 'Hacer nuevos amigos', value: 'new_friends', checked: false },
+          { label: 'Participar en actividades extraescolares', value: 'extracurricular', checked: false },
+          { label: 'Tomar decisiones sobre mi futuro', value: 'future_decisions', checked: false },
+        ],
+      },
+      {
+        name: 'submit',
+        label: '¡Comenzar mi Viaje Profesional!',
+        type: 'submit-button',
+        icon: 'rocket_launch',
+        fullWidth: true,
+      },
+    ],
+  },
+],
+
     columns: 2,
     showProgress: true,
     currentStep: 1,
@@ -533,11 +430,7 @@ export class CreatePersonComponent implements OnInit {
     private userService: UserService,
   ) {}
   ngOnInit(): void {
-    setTimeout(() => {
-      if (this.formDynamicComponent) {
-        this.loadDefaultCharacter();
-      }
-    }, 100);
+
   }
 
   // Helper methods
@@ -547,29 +440,7 @@ export class CreatePersonComponent implements OnInit {
     return date.toISOString().split('T')[0];
   }
 
-  // Cargar personaje por defecto
-  loadDefaultCharacter(): void {
-    const defaultCharacter = {
-      fullName: 'Carlos Rodríguez Pérez',
-      birthDate: this.getDateYearsAgo(16),
-      gender: 'male',
-      city: 'madrid',
-      currentSituation: 'high_school',
-      educationLevel: 'highschool',
-      academicPerformance: 'average',
-      careerInterest: 'technology',
-      aspiration: 'university',
-      familySituation: 'stable_family',
-      economicSupport: 'partial_support',
-      monthlyIncome: 0,
-      savings: 500,
-      debts: 0,
-      availableTime: 'full_time',
-    };
 
-    this.formDynamicComponent.setFormValues(defaultCharacter);
-    this.updateCharacterPreview(defaultCharacter);
-  }
 
   // Cargar personaje predefinido
   loadPredefinedCharacter(type: string): void {
@@ -581,7 +452,7 @@ export class CreatePersonComponent implements OnInit {
           fullName: 'Ana Martínez López',
           birthDate: this.getDateYearsAgo(16),
           gender: 'female',
-          city: 'madrid',
+          city: { label: 'Madrid', value: 'madrid', avgRoomRent: 600 },
           currentSituation: 'high_school',
           educationLevel: 'highschool',
           academicPerformance: 'high',
@@ -625,7 +496,7 @@ export class CreatePersonComponent implements OnInit {
           fullName: 'Sofía Chen Wang',
           birthDate: this.getDateYearsAgo(17),
           gender: 'female',
-          city: 'valencia',
+          city: { label: 'Álava', value: 'alava', avgRoomRent: 450 },
           currentSituation: 'high_school',
           educationLevel: 'highschool',
           academicPerformance: 'excellent',
@@ -647,7 +518,7 @@ export class CreatePersonComponent implements OnInit {
           fullName: 'Alex Torres Ruiz',
           birthDate: this.getDateYearsAgo(16),
           gender: 'nonbinary',
-          city: 'sevilla',
+          city: { label: 'Álava', value: 'alava', avgRoomRent: 450 },
           currentSituation: 'high_school',
           educationLevel: 'basic',
           academicPerformance: 'average',
@@ -694,8 +565,10 @@ export class CreatePersonComponent implements OnInit {
         data[field] = [];
       }
     });
-    data.educationLevel === 'basic'? data.academicXp = 10: data.academicXp = 0;
-    data.technicalSkills ? data.workXp = 10: data.workXp = 0;
+    data.educationLevel === 'basic'
+      ? (data.academicXp = 10)
+      : (data.academicXp = 0);
+    data.technicalSkills ? (data.workXp = 10) : (data.workXp = 0);
     data.academicLevel = 'LEVEL_1';
     data.workLevel = 'LEVEL_1';
     this.baseService.postItem(endpoint, data).subscribe({
@@ -815,9 +688,7 @@ export class CreatePersonComponent implements OnInit {
       fullName: `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`,
       birthDate: this.getRandomDate(2005, 2007),
       gender: ['male', 'female', 'nonbinary'][Math.floor(Math.random() * 3)],
-      city: ['madrid', 'barcelona', 'valencia', 'sevilla'][
-        Math.floor(Math.random() * 4)
-      ],
+      city: PROVINCIAS_ESPAÑA[Math.floor(Math.random() * 4)],
       currentSituation: ['high_school', 'vocational_training', 'not_studying'][
         Math.floor(Math.random() * 3)
       ],
@@ -992,10 +863,10 @@ export class CreatePersonComponent implements OnInit {
         amount = 1000;
         break;
       case 'difficult_situation':
-        amount = 200;
+        amount = 0;
         break;
       default:
-        amount = 200;
+        amount = 0;
         break;
     }
     if (amount === undefined || amount === null) amount = 0;
@@ -1042,25 +913,18 @@ export class CreatePersonComponent implements OnInit {
 
   getMonthlyExpensesSummary(): { category: string; amount: number }[] {
     const expenses = [];
-    const baseExpense =
-      this.characterPreview.city === 'madrid' ||
-      this.characterPreview.city === 'barcelona'
-        ? 400
-        : 300;
-
-    if (this.characterPreview.expenses.housing > 0) {
-      expenses.push({ category: 'Vivienda', amount: 0 });
-    } else if (this.characterPreview.age < 18) {
-      expenses.push({ category: 'Vivienda', amount: 0 });
+    if (this.characterPreview.residentialCity === 'no') {
+      expenses.push({
+        category: 'Vivienda',
+        amount: this.characterPreview.city.avgRoomRent || 0,
+      });
     } else {
       expenses.push({ category: 'Vivienda', amount: 0 });
     }
-
     expenses.push({
       category: 'Alimentación',
       amount: this.characterPreview.expenses.food || 200,
     });
-
     expenses.push({
       category: 'Transporte',
       amount: this.characterPreview.expenses.transport || 50,
@@ -1093,10 +957,10 @@ export class CreatePersonComponent implements OnInit {
         income = 1000;
         break;
       case 'difficult_situation':
-        income = 200;
+        income = 0;
         break;
       default:
-        income = 200;
+        income = 0;
         break;
     }
     const totalExpenses = this.getMonthlyExpensesSummary().reduce(
@@ -1457,7 +1321,8 @@ export class CreatePersonComponent implements OnInit {
       fullName: data.fullName || 'Nuevo Personaje',
       age: age,
       currentSituation: data.currentSituation || 'high_school',
-      city: data.city || 'madrid',
+      city: PROVINCIAS_ESPAÑA.find((p) => p.value.toLowerCase()  === data.city.toLowerCase() ) ,
+      residentialCity: data.residentialCity || 'si',
       careerInterest: data.careerInterest || 'technology',
       aspiration: data.aspiration || 'university',
       economicSupport: data.economicSupport || 'partial_support',
@@ -1501,11 +1366,10 @@ export class CreatePersonComponent implements OnInit {
       gender: 'male',
       longTermGoals: [],
       shortTermGoals: [],
-        academicLevel: data.educationLevel || 'basic',
-        academicXp: data.academicPerformance || 'average',
-        workLevel: 'LEVEL_1',
-        workXp: 0,
-
+      academicLevel: data.educationLevel || 'basic',
+      academicXp: data.academicPerformance || 'average',
+      workLevel: 'LEVEL_1',
+      workXp: 0,
     };
   }
 

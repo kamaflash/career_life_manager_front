@@ -149,11 +149,6 @@ export class DashboardComponent implements OnInit {
         console.log(error);
       },
       complete: () => {
-        if (this.userService.user && !this.userService.user.persons) {
-          this.router.navigate(['/create-person']);
-        } else {
-          this.router.navigate(['/index']);
-        }
       },
     });
   }

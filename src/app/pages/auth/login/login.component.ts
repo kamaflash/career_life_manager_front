@@ -27,7 +27,7 @@ export class LoginComponent {
             name: 'email',
             label: 'Correo electrónico',
             type: 'email',
-            icon: '📧',
+            icon: 'email',
             placeholder: 'ejemplo@email.com',
             required: true,
             fullWidth: true
@@ -36,7 +36,7 @@ export class LoginComponent {
             name: 'password',
             label: 'Contraseña',
             type: 'password',
-            icon: '🔒',
+            icon: 'lock',
             placeholder: '••••••••',
             required: true,
             fullWidth: true
@@ -77,10 +77,16 @@ export class LoginComponent {
     };
 
     this.baseService.postItemSinToken(url, loginUser).subscribe({
-      next: (resp) => {
+      next: (resp:any) => {
         if (resp) {
           this.userService.user = resp as User;
-          this.completeLogin(data);
+          if(resp.person) {
+          this.completeLogin(data, '/index');
+          } else {
+          this.completeLogin(data, '/create-person');
+
+          }
+
         } else {
           this.handleLoginError('Credenciales inválidas');
         }
@@ -94,10 +100,10 @@ export class LoginComponent {
   /**
    * Completa el proceso de login después de validar credenciales
    */
-  private completeLogin(data: any): void {
+  private completeLogin(data: any, url:string): void {
     this.userService.login(data).subscribe({
       next: () => {
-        this.router.navigate(['/index']);
+        this.router.navigate([url]);
       },
       error: (error) => {
         this.handleLoginError(error.message || 'Error al iniciar sesión');

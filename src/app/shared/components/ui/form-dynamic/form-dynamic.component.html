@@ -32,7 +32,7 @@
     <!-- Encabezado de sección -->
     <div *ngIf="section.title" class="mb-6">
       <h3 class="text-lg font-bold mb-2 flex items-center gap-2 text-gray-100">
-        <span *ngIf="section.icon" class="text-xl">{{ section.icon }}</span>
+        <span *ngIf="section.icon" class="material-icons text-lg text-gray-100">{{ section.icon }}</span>
         {{ section.title }}
       </h3>
       <p *ngIf="section.description" class="text-sm text-gray-400">
@@ -66,12 +66,20 @@
               [placeholder]="field.placeholder || ''"
               [attr.min]="field.min"
               [attr.max]="field.max"
-              class="w-full bg-gray-900/50 border border-gray-700 rounded-xl px-4 py-3 pl-11 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+              class="w-full bg-gray-900/50 border border-gray-700 rounded-xl px-4 py-3 pl-11
+                     text-white placeholder-gray-500
+                     focus:outline-none focus:border-blue-500
+                     focus:ring-2 focus:ring-blue-500/20
+                     transition-all"
               [class.border-red-500]="isFieldInvalid(field.name)"
               [class.opacity-50]="isFieldDisabled(field.name)"
               (input)="onFieldChange(field)"
             />
-            <span *ngIf="field.icon" class="absolute left-3 top-3 text-lg">
+
+            <span
+              *ngIf="field.icon"
+              class="material-icons absolute left-3 top-3 text-gray-400"
+            >
               {{ field.icon }}
             </span>
           </div>
@@ -145,11 +153,10 @@
                 [value]="option.value"
                 class="text-white bg-gray-800"
               >
-                <span *ngIf="option.icon" class="mr-2">{{ option.icon }}</span>
                 {{ option.label }}
               </option>
             </select>
-            <span *ngIf="field.icon" class="absolute left-3 top-3 text-lg">
+            <span *ngIf="field.icon" class="material-icons absolute left-3 top-3 text-lg text-gray-400">
               {{ field.icon }}
             </span>
             <span class="absolute right-3 top-3 text-gray-400">▼</span>
@@ -240,7 +247,7 @@
               [disabled]="isFieldDisabled(field.name)"
               (click)="selectDifficulty(field.name, button.value)"
             >
-              <div class="text-lg mb-1">{{ button.icon || "🎮" }}</div>
+              <div class="material-icons text-lg mb-1 text-white">{{ button.icon || "🎮" }}</div>
               <div class="font-medium text-white">{{ button.label }}</div>
               <div
                 *ngIf="button.description"
@@ -251,6 +258,7 @@
             </button>
           </div>
         </div>
+
         <!-- Campo de fecha -->
         <div
           *ngIf="field.type === 'date'"
@@ -273,7 +281,9 @@
               [class.opacity-50]="isFieldDisabled(field.name)"
               (change)="onFieldChange(field)"
             />
-            <span class="absolute left-3 top-3 text-lg"> 📅 </span>
+            <span *ngIf="field.icon" class="material-icons absolute left-3 top-3 text-lg text-gray-400">
+              {{ field.icon }}
+            </span>
           </div>
 
           <!-- Mensajes de error -->
@@ -294,6 +304,7 @@
             </span>
           </div>
         </div>
+
         <!-- Checkbox simple -->
         <div
           *ngIf="field.type === 'checkbox-simple'"
@@ -316,6 +327,7 @@
             </label>
           </div>
         </div>
+
         <!-- Campo checkbox-group - Versión mejorada -->
         <div
           *ngIf="field.type === 'checkbox-group'"
@@ -387,7 +399,7 @@
                 <!-- Ícono opcional -->
                 <span
                   *ngIf="option.icon"
-                  class="text-lg ml-2 text-gray-400 peer-checked:text-blue-400"
+                  class="material-icons text-lg ml-2 text-gray-400"
                 >
                   {{ option.icon }}
                 </span>
@@ -458,6 +470,7 @@
             </span>
           </div>
         </div>
+
         <!-- Botón de submit -->
         <div
           *ngIf="field.type === 'submit-button'"
@@ -494,7 +507,7 @@
                   ></path>
                 </svg>
               </span>
-              <span *ngIf="!isLoading && field.icon" class="text-lg">{{
+              <span *ngIf="!isLoading && field.icon" class="material-icons text-lg text-white">{{
                 field.icon
               }}</span>
               <span>{{ field.label }}</span>
@@ -550,7 +563,7 @@
         (click)="onSocialLogin('google')"
       >
         <span class="flex items-center justify-center gap-2">
-          <span>🔵</span>
+          <span class="text-white">🔵</span>
           <span class="text-sm">Google</span>
         </span>
       </button>
@@ -561,7 +574,7 @@
         (click)="onSocialLogin('linkedin')"
       >
         <span class="flex items-center justify-center gap-2">
-          <span>💼</span>
+          <span class="text-white">💼</span>
           <span class="text-sm">LinkedIn</span>
         </span>
       </button>
@@ -572,7 +585,7 @@
         (click)="onSocialLogin('github')"
       >
         <span class="flex items-center justify-center gap-2">
-          <span>🐙</span>
+          <span class="text-white">🐙</span>
           <span class="text-sm">GitHub</span>
         </span>
       </button>

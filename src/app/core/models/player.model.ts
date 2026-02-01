@@ -5,8 +5,8 @@ export interface CharacterPreview {
   // ===== IDENTIDAD =====
   fullName: string;
   age: number;                 // calculada desde birthDate
-  city: string;
-
+  city: any;
+residentialCity: 'si' | 'no';
   gender: 'male' | 'female' | 'nonbinary' | 'unspecified';
 
   // ===== SITUACIÓN VITAL =====
