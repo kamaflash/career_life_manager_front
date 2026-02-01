@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener, Input } from '@angular/core';
 import { UserService } from '../../../../core/services/users/users.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 
 // Interface para los menús
 interface MenuItem {
@@ -34,7 +35,7 @@ interface UserMenuItem {
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
@@ -147,14 +148,15 @@ export class HeaderComponent implements OnInit {
   ] as UserMenuItem[]
 };
   constructor(private userService: UserService) {
-    this.updateScreenWidth();
-  }
-
-  ngOnInit(): void {
     if (this.userService.user?.persons) {
       this.player = this.userService.user?.persons;
     }
     this.updateScreenWidth();
+  }
+
+  ngOnInit(): void {
+
+   // this.updateScreenWidth();
   }
 
   @HostListener('window:resize', ['$event'])

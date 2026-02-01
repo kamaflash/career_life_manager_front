@@ -7,6 +7,7 @@ import { SidebarComponent } from '../shared/components/layout/sidebar/sidebar.co
 import { RightPanelComponent } from '../shared/components/layout/right-panel/right-panel.component';
 import { environment } from '../../enviroments/environment';
 import { BaseService } from '../core/services/base/base-service.service';
+import { ModalComponent } from "../shared/components/ui/modal/modal.component";
 const endpoint = environment.baseUrlSpring + 'systems';
 
 @Component({
@@ -17,7 +18,8 @@ const endpoint = environment.baseUrlSpring + 'systems';
     FooterComponent,
     SidebarComponent,
     RightPanelComponent,
-  ],
+    ModalComponent
+],
   templateUrl: './pages.component.html',
   styleUrl: './pages.component.css',
 })
@@ -66,4 +68,5 @@ export class PagesComponent implements OnInit {
       },
     });
   }
+
 }

@@ -138,7 +138,7 @@ export interface Action {
   description: string;
   icon: string;
   cost?: number | string;
-  costType?: 'ap' | 'money' | 'requirement' | 'none';
+  costType?: 'subscribe' | 'search' | 'requirement' | 'none';
   academicXpReward?: string;
   showArrow?: boolean;
   execute: () => void;
@@ -189,7 +189,7 @@ export interface ActionCard {
   description: string;
   icon: string;
   cost: number;
-  costType: 'ap' | 'money';
+  costType: 'subscribe' | 'money';
   academicXpReward: string;
   showArrow: boolean;
   execute: () => void;

@@ -27,9 +27,9 @@
     <div class="space-y-2">
       @for (action of category.actions; track action.name) {
       <button
-        class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent"
+        class="group w-full flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-700/50 rounded-xl transition-all duration-200 border border-transparent cursor-pointer"
         [ngClass]="'hover:border-' + category.color + '-500/30'"
-        (click)="executeAction(action)">
+        (click)="openModal(action)">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-lg flex items-center justify-center" [ngClass]="'bg-' + category.color + '-500/20'">
             <span class="text-lg">{{action.icon}}</span>
@@ -79,3 +79,16 @@
     </div>
   </div>
 </aside>
+<app-modal
+  [open]="modalOpen"
+  title="Crear proyecto"
+  size="md"
+  (close)="closeModal()"
+>
+  <!-- CONTENIDO -->
+  <p class="text-gray-300">
+    {{actionSelected?.costType}}
+    <app-subscribe [actionSelected]="actionSelected" *ngIf="actionSelected?.costType === 'subscribe'" (closed)="closeModal()"></app-subscribe>
+  </p>
+
+</app-modal>

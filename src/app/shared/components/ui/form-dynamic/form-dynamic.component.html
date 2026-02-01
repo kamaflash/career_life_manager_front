@@ -32,7 +32,7 @@
     <!-- Encabezado de sección -->
     <div *ngIf="section.title" class="mb-6">
       <h3 class="text-lg font-bold mb-2 flex items-center gap-2 text-gray-100">
-        <span *ngIf="section.icon" class="material-icons text-lg text-gray-100">{{ section.icon }}</span>
+        <span *ngIf="section.icon" class="material-icons p-1 text-lg text-gray-100">{{ section.icon }}</span>
         {{ section.title }}
       </h3>
       <p *ngIf="section.description" class="text-sm text-gray-400">
@@ -78,7 +78,7 @@
 
             <span
               *ngIf="field.icon"
-              class="material-icons absolute left-3 top-3 text-gray-400"
+              class="material-icons p-1 absolute left-3 top-3 text-gray-400"
             >
               {{ field.icon }}
             </span>
@@ -156,7 +156,7 @@
                 {{ option.label }}
               </option>
             </select>
-            <span *ngIf="field.icon" class="material-icons absolute left-3 top-3 text-lg text-gray-400">
+            <span *ngIf="field.icon" class="material-icons p-1 absolute left-3 top-3 text-lg text-gray-400">
               {{ field.icon }}
             </span>
             <span class="absolute right-3 top-3 text-gray-400">▼</span>
@@ -247,7 +247,7 @@
               [disabled]="isFieldDisabled(field.name)"
               (click)="selectDifficulty(field.name, button.value)"
             >
-              <div class="material-icons text-lg mb-1 text-white">{{ button.icon || "🎮" }}</div>
+              <div class="material-icons p-1 text-lg mb-1 text-white">{{ button.icon || "🎮" }}</div>
               <div class="font-medium text-white">{{ button.label }}</div>
               <div
                 *ngIf="button.description"
@@ -281,7 +281,7 @@
               [class.opacity-50]="isFieldDisabled(field.name)"
               (change)="onFieldChange(field)"
             />
-            <span *ngIf="field.icon" class="material-icons absolute left-3 top-3 text-lg text-gray-400">
+            <span *ngIf="field.icon" class="material-icons p-1 absolute left-3 top-3 text-lg text-gray-400">
               {{ field.icon }}
             </span>
           </div>
@@ -399,7 +399,7 @@
                 <!-- Ícono opcional -->
                 <span
                   *ngIf="option.icon"
-                  class="material-icons text-lg ml-2 text-gray-400"
+                  class="material-icons p-1 text-lg ml-2 text-gray-400"
                 >
                   {{ option.icon }}
                 </span>
@@ -507,7 +507,7 @@
                   ></path>
                 </svg>
               </span>
-              <span *ngIf="!isLoading && field.icon" class="material-icons text-lg text-white">{{
+              <span *ngIf="!isLoading && field.icon" class="material-icons p-1 text-lg text-white">{{
                 field.icon
               }}</span>
               <span>{{ field.label }}</span>

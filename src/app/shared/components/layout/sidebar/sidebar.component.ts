@@ -1,23 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Action, ActionCard, ActionCategory, Formation } from '../../../../core/interfaces';
+import {
+  Action,
+  ActionCard,
+  ActionCategory,
+  Formation,
+} from '../../../../core/interfaces';
 import { environment } from '../../../../../enviroments/environment';
 import { UserService } from '../../../../core/services/users/users.service';
 import { BaseService } from '../../../../core/services/base/base-service.service';
+import { ModalComponent } from "../../ui/modal/modal.component";
+import { SubscribeComponent } from "./components/subscribe/subscribe.component";
 const endpoint = environment.baseUrlSpring;
-
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModalComponent, SubscribeComponent],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css'
+  styleUrl: './sidebar.component.css',
 })
-export class SidebarComponent  implements OnInit {
+export class SidebarComponent implements OnInit {
   points = 5;
   actionCategories: ActionCategory[] = [];
-  constructor(private userService: UserService, private baseService: BaseService) { }
+  actionSelected:any;
+  constructor(
+    private userService: UserService,
+    private baseService: BaseService,
+  ) {}
   ngOnInit() {
     this.initializeActionCategories();
     this.getFormation();
@@ -37,10 +47,10 @@ export class SidebarComponent  implements OnInit {
             description: '3 ofertas disponibles',
             icon: '🎯',
             cost: 2,
-            costType: 'ap',
+            costType: 'search',
             academicXpReward: undefined,
             showArrow: true,
-            execute: () => this.searchJob()
+            execute: () => this.searchJob(),
           },
           {
             name: 'Solicitar Ascenso',
@@ -50,9 +60,9 @@ export class SidebarComponent  implements OnInit {
             costType: 'requirement',
             academicXpReward: undefined,
             showArrow: false,
-            execute: () => this.requestPromotion()
-          }
-        ]
+            execute: () => this.requestPromotion(),
+          },
+        ],
       },
       {
         id: 'formacion',
@@ -66,32 +76,32 @@ export class SidebarComponent  implements OnInit {
             description: 'React Avanzado (8h)',
             icon: '📚',
             cost: 3,
-            costType: 'ap',
+            costType: 'subscribe',
             academicXpReward: '+200 XP',
             showArrow: false,
-            execute: () => this.takeCourse()
+            execute: () => this.takeCourse(),
           },
           {
             name: 'Taller Presencial',
             description: 'Habilidades Blandas',
             icon: '🎤',
             cost: 2,
-            costType: 'ap',
+            costType: 'subscribe',
             academicXpReward: '+150 XP',
             showArrow: false,
-            execute: () => this.attendWorkshop()
+            execute: () => this.attendWorkshop(),
           },
           {
             name: 'Certificación',
             description: 'AWS Developer',
             icon: '🏆',
             cost: 4,
-            costType: 'ap',
+            costType: 'subscribe',
             academicXpReward: '+50% salario',
             showArrow: false,
-            execute: () => this.getCertification()
-          }
-        ]
+            execute: () => this.getCertification(),
+          },
+        ],
       },
       {
         id: 'finanzas',
@@ -108,7 +118,7 @@ export class SidebarComponent  implements OnInit {
             costType: 'requirement',
             academicXpReward: undefined,
             showArrow: true,
-            execute: () => this.investStock()
+            execute: () => this.investStock(),
           },
           {
             name: 'Abrir Cuenta Ahorro',
@@ -118,7 +128,7 @@ export class SidebarComponent  implements OnInit {
             costType: 'none',
             academicXpReward: 'Sin AP',
             showArrow: true,
-            execute: () => this.openSavingsAccount()
+            execute: () => this.openSavingsAccount(),
           },
           {
             name: 'Solicitar Crédito',
@@ -128,9 +138,9 @@ export class SidebarComponent  implements OnInit {
             costType: 'requirement',
             academicXpReward: undefined,
             showArrow: false,
-            execute: () => this.requestLoan()
-          }
-        ]
+            execute: () => this.requestLoan(),
+          },
+        ],
       },
       {
         id: 'salud',
@@ -144,10 +154,10 @@ export class SidebarComponent  implements OnInit {
             description: '+10% energía',
             icon: '🏋️',
             cost: 1,
-            costType: 'ap',
+            costType: 'subscribe',
             academicXpReward: '2h',
             showArrow: false,
-            execute: () => this.goGym()
+            execute: () => this.goGym(),
           },
           {
             name: 'Descansar',
@@ -157,19 +167,19 @@ export class SidebarComponent  implements OnInit {
             costType: 'none',
             academicXpReward: '+40% energía',
             showArrow: true,
-            execute: () => this.rest()
+            execute: () => this.rest(),
           },
           {
             name: 'Consulta Médica',
             description: 'Chequeo anual',
             icon: '🍎',
             cost: 150,
-            costType: 'money',
+            costType: 'search',
             academicXpReward: '+20% salud',
             showArrow: false,
-            execute: () => this.medicalCheckup()
-          }
-        ]
+            execute: () => this.medicalCheckup(),
+          },
+        ],
       },
       {
         id: 'social',
@@ -183,32 +193,32 @@ export class SidebarComponent  implements OnInit {
             description: 'Conferencia Tech',
             icon: '🤝',
             cost: 2,
-            costType: 'ap',
+            costType: 'subscribe',
             academicXpReward: '+10 contactos',
             showArrow: false,
-            execute: () => this.networkingEvent()
+            execute: () => this.networkingEvent(),
           },
           {
             name: 'Salir con Amigos',
             description: '+15% felicidad',
             icon: '🎉',
             cost: 50,
-            costType: 'money',
+            costType: 'search',
             academicXpReward: '3h',
             showArrow: false,
-            execute: () => this.goOutWithFriends()
+            execute: () => this.goOutWithFriends(),
           },
           {
             name: 'Cita Romántica',
             description: 'Restaurante elegante',
             icon: '💑',
             cost: 120,
-            costType: 'money',
+            costType: 'search',
             academicXpReward: '+25% felicidad',
             showArrow: false,
-            execute: () => this.romanticDate()
-          }
-        ]
+            execute: () => this.romanticDate(),
+          },
+        ],
       },
       {
         id: 'vivienda',
@@ -222,20 +232,20 @@ export class SidebarComponent  implements OnInit {
             description: 'Mejorar vivienda',
             icon: '🏢',
             cost: 1,
-            costType: 'ap',
+            costType: 'subscribe',
             academicXpReward: undefined,
             showArrow: true,
-            execute: () => this.searchApartment()
+            execute: () => this.searchApartment(),
           },
           {
             name: 'Amueblar Casa',
             description: 'Muebles nuevos',
             icon: '🛋️',
             cost: 2000,
-            costType: 'money',
+            costType: 'search',
             academicXpReward: '+10% comodidad',
             showArrow: false,
-            execute: () => this.furnishHouse()
+            execute: () => this.furnishHouse(),
           },
           {
             name: 'Comprar Casa',
@@ -245,15 +255,19 @@ export class SidebarComponent  implements OnInit {
             costType: 'requirement',
             academicXpReward: 'Requisito: Capital €30k',
             showArrow: false,
-            execute: () => this.buyHouse()
-          }
-        ]
-      }
+            execute: () => this.buyHouse(),
+          },
+        ],
+      },
     ];
   }
 
   executeAction(action: Action) {
-    if (action.costType === 'ap' && typeof action.cost === 'number' && this.points >= action.cost) {
+    if (
+      action.costType === 'subscribe' &&
+      typeof action.cost === 'number' &&
+      this.points >= action.cost
+    ) {
       this.points -= action.cost;
     }
 
@@ -359,49 +373,69 @@ export class SidebarComponent  implements OnInit {
   }
 
   getFormation() {
-    const url:string = endpoint + "trainer/character/"+this.userService.user?.persons?.id+"/available"
+    const url: string =
+      endpoint +
+      'trainer/character/' +
+      this.userService.user?.persons?.id +
+      '/available';
 
     this.baseService.getItems(url).subscribe({
-      next: (resp:any) => {
+      next: (resp: any) => {
         this.actionCategories[1].actions = [resp.formations]; // Limpiar acciones actuales
 
-        this.actionCategories[1].actions = resp.formations.map((f:any) =>
-  this.mapFormationToAction(f, (formation:any) => {
-
-  })
-);
+        this.actionCategories[1].actions = resp.formations.map((f: any) =>
+          this.mapFormationToAction(f, (formation: any) => {}),
+        );
       },
       error: (err) => {
         console.error('Error fetching formation data', err);
-      }
+      },
     });
   }
 
   mapFormationToAction(
-  formation: Formation,
-  onExecute: (formation: Formation) => void
-): ActionCard {
-  return {
-    id: formation.id,
-    name: formation.name,
-    description: `${formation.durationHours}h · ${formation.difficulty}`,
-    icon: this.getIconByCategory(formation.category),
-    cost: formation.effort,
-    costType: 'ap',
-    academicXpReward: `+${formation.academicXpReward} XP`,
-    showArrow: false,
-    execute: () => onExecute(formation)
-  };
-}
-getIconByCategory(category: string): string {
-  switch (category) {
-    case 'technology': return '💻';
-    case 'business': return '📊';
-    case 'health': return '🩺';
-    case 'creative': return '🎨';
-    case 'sports': return '🏋️';
-    case 'science': return '🔬';
-    default: return '📚';
+    formation: Formation,
+    onExecute: (formation: Formation) => void,
+  ): ActionCard {
+    return {
+      id: formation.id,
+      name: formation.name,
+      description: `${formation.durationHours}h · ${formation.difficulty}`,
+      icon: this.getIconByCategory(formation.category),
+      cost: formation.effort,
+      costType: 'subscribe',
+      academicXpReward: `+${formation.academicXpReward} XP`,
+      showArrow: false,
+      execute: () => onExecute(formation),
+    };
   }
+  getIconByCategory(category: string): string {
+    switch (category) {
+      case 'technology':
+        return '💻';
+      case 'business':
+        return '📊';
+      case 'health':
+        return '🩺';
+      case 'creative':
+        return '🎨';
+      case 'sports':
+        return '🏋️';
+      case 'science':
+        return '🔬';
+      default:
+        return '📚';
+    }
+  }
+
+  modalOpen = false;
+
+openModal(action:any) {
+  this.modalOpen = true;
+  this.actionSelected = action
+}
+
+closeModal() {
+  this.modalOpen = false;
 }
 }

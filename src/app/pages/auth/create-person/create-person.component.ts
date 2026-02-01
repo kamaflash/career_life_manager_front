@@ -418,7 +418,7 @@ export class CreatePersonComponent implements OnInit {
 ],
 
     columns: 2,
-    showProgress: true,
+    showProgress: false,
     currentStep: 1,
     totalSteps: 9,
     showSocialLogin: false,

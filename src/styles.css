@@ -1,2 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
+.material-icons {
+  font-size: 16px; /* o el tamaño que quieras */
+}
